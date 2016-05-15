@@ -1,0 +1,108 @@
+@media only screen and (min-width: 1300px) {
+  .card:hover rect.card-back{
+    /*filter:url(#blur);*/
+    /*opacity:0.7;*/
+  }
+}
+
+.score {
+  width:30%;
+  height:20%;
+  display:inline-block;
+}
+.card {
+  cursor: pointer;
+}
+.card.small {
+  width:100px;
+  height:50px;
+}
+.light .selected .card-svg .card-back {
+  stroke:orange;
+  stroke-width:10;
+}
+.dark .selected .card-svg .card-back {
+  stroke:orange;
+  stroke-width:8;
+}
+.card-back {
+  fill: none;
+  stroke-width:10;
+  width: 200;
+  height: 100;
+}
+.light .card-back {
+  stroke: #BBB;
+}
+.dark .card-back {
+  stroke: #222;
+}
+
+.stripe {
+  width:4;
+  height:2;
+}
+
+.shape {
+  stroke-width:4;
+}
+.light {
+  background-color: white;
+}
+.light .red {
+  stroke: red;
+  fill: red;
+}
+.light .green {
+  stroke: green;
+  fill: green;
+}
+.light .purple {
+  stroke: #5A1398;
+  fill: #5A1398;
+}
+.light .open {
+  fill: none;
+}
+
+
+.dark {
+  background-color:black;
+}
+.dark .green {
+  stroke: cyan;
+  fill: cyan;
+}
+.dark .purple {
+  stroke: magenta;
+  fill: magenta;
+}
+.dark .red {
+  stroke:yellow;
+  fill: yellow;
+}
+.dark .open {
+  fill: none;
+}
+
+.red.striped {
+  stroke:url(#red-stripe);
+  fill: url(#red-stripe);
+}
+.green.striped {
+  stroke: url(#green-stripe);
+  fill: url(#green-stripe);
+}
+.purple.striped {
+  stroke: url(#purple-stripe);
+  fill: url(#purple-stripe);
+}
+.light .green.striped {
+  stroke: green;
+}
+.light .red.striped {
+  stroke: red;
+}
+.light .purple.striped {
+  stroke: #5A1398;
+}
