@@ -1,6 +1,13 @@
-var deck = makeDeck();
-var cards = deal12(deck)
 var $el = $("#display");
+
+function lightDark() {
+  $('body').toggleClass('light').toggleClass('dark');
+  if ($('body').hasClass('light')) {
+    $('#lightspan').html('off');
+  } else {
+    $('#lightspan').html('off');
+  }
+}
 
 function toggleCard($card) {
   $card.toggleClass('selected');
@@ -17,7 +24,7 @@ function makeCardDivs() {
     }
   }
   $('.card').mousedown(function(e) {
-    e.preventDefault();
+    e.preventDefault(); // don't remember what this is for
   });
 
   evtName = ('ontouchstart' in window) ? 'touchend' : 'click';
@@ -29,20 +36,25 @@ function makeCardDivs() {
   })
 };
 
-function layoutCardDivs() {  
+function getCardEl(i) {
+  return $($el.children()[i]);
+}
+
+function layoutCardDivs(numCards) { // set positions / sizes
   var unit = Math.min($el.width() / 10, $el.height() / 5);
   var w = unit * 2, h = unit;
-  var marginw = ($el.width() - (4 * unit * 2)) / 5, marginh = ($el.height() - (3 * unit)) / 4;
+  var rows = 3 + (numCards - 12) / 3;
 
-  for(var r = 0; r < 3; ++r) {
+  for(var r = 0; r < rows; ++r) {
     for(var c = 0; c < 4; ++c) {
       var i = r * 4 + c;
+      var marginw = ($el.width() - (4 * unit * 2)) / 5, marginh = ($el.height() - (rows * unit)) / (rows + 1);
       var $elem = getCardEl(i).css({position: "absolute", left: marginw * (c + 1) + w * c, top: marginh * (r + 1) + h * r, width: w, height: h});;
     }
   }
 }
 
-function render() {
+function render() { // draws svgs
   var unit = Math.min($el.width() / 10, $el.height() / 5);
   var w = unit * 2, h = unit;
   var marginw = ($el.width() - (4 * unit * 2)) / 5, marginh = ($el.height() - (3 * unit)) / 4;
@@ -58,13 +70,42 @@ function render() {
     }
   }
 }
+
+var deck = makeDeck();
+var cards = deal12(deck)
+
 makeCardDivs();
 layoutCardDivs();
 render();
 
+var animationCounter = 0;
+function startAnimation(set, callback) {
+  var cnt = ++animationCounter;
+  animationTime = 400;
+  var steps = 20;
+  var t = 0;
+  $('.selected').removeClass('selected')
 
-function getCardEl(i) {
-  return $($el.children()[i]);
+  for (var i = 0; i < steps; ++i) {
+    set.map(function(j) {
+      var $card = getCardEl(j);
+      var _i = i;
+      setTimeout(function() {
+        if (animationCounter == cnt) { // TODO: remove this by assigning dummy
+          $('path', $card).css('opacity', '' + (1 - (_i + 1) / steps));
+        }
+      }
+      , t);
+    });
+    t += animationTime / steps;
+  }   
+  setTimeout(callback, t);
+}
+
+startTime = Date.now();
+
+function rerender() {  
+  render();
 }
 
 function help() {
@@ -87,36 +128,6 @@ function help() {
   return 'not found'
 }
 
-var animationCounter = 0;
-function startAnimation(set, callback) {
-  var cnt = ++animationCounter;
-  animationTime = 400;
-  var steps = 20;
-  var t = 0;
-  $('.selected').removeClass('selected')
-
-  for (var i = 0; i < steps; ++i) {
-    set.map(function(j) {
-      var $card = getCardEl(j);
-      var _i = i;
-      setTimeout(function() {
-        if (animationCounter == cnt) {
-          $('path', $card).css('opacity', '' + (1 - (_i + 1) / steps));
-        }
-      }
-      , t);
-    });
-    t += animationTime / steps;
-  }   
-  setTimeout(callback, t);
-}
-
-startTime = Date.now();
-
-function rerender() {  
-  render();
-}
-
 function checkSet() {
   var selectedCards = [];
   for (var i = 0; i < 12; i++) {
@@ -125,8 +136,8 @@ function checkSet() {
       selectedCards.push(i);
     }
   }
-  var diff = new Date(Date.now() - startTime)
-  console.log(""+pad2(diff.getMinutes())+":"+pad2(diff.getSeconds()))
+  var diff = new Date(Date.now() - startTime);
+  console.log(""+pad2(diff.getMinutes())+":"+pad2(diff.getSeconds()));
 
   function isGood(set) {
     if (set.length == 3) {
@@ -149,7 +160,7 @@ function checkSet() {
     console.log("yay");
     startAnimation(selectedCards, function() {
       for (var i of selectedCards) {
-        cards[i] = deck.pop();
+        cards[i] = deck.pop(); // TODO: accomodate for end of deck
       }
       rerender();
     });
@@ -158,48 +169,21 @@ function checkSet() {
   }
   return false;
 }
-$('#check-set').click(checkSet)
 
-$('#no-set').click(function() {
-  help();
-});
+$('#light-dark').click(lightDark)
+
+$(window).resize(layoutCardDivs);
 
 $('#restart').click(function() {
   deck = makeDeck()
   cards = deal12(deck)
   startTime = Date.now()
   render()
-  $('.score').html(0);
 });
 
-$('.score').html(0);
+$('#check-set').click(checkSet)
 
-$('.score').click(function(evt) {
-  var $this = $(this)
-  $this.html(1 + parseInt($this.html()));
-});
-
-$('.score').on('contextmenu', function(evt) {
-  var $this = $(this)
-  $this.html(-1 + parseInt($this.html()));
-  return false;
-});
-
-function lightDark() {
-  $('body').toggleClass('light').toggleClass('dark');
-  if ($('body').hasClass('light')) {
-    $('#lightspan').html('off');
-  } else {
-    $('#lightspan').html('off');
-  }
-}
-
-$('#light-dark').click(lightDark)
-
-$(window).resize(function() {
-  layoutCardDivs();
-});
-
+$('#no-set').click(help);
 
 $('body').on('keydown', function(evt) {
   var code = evt.originalEvent.code;
