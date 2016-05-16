@@ -10,8 +10,10 @@ function lightDark() {
 }
 
 function toggleCard($card) {
-  $card.toggleClass('selected');
-  checkSet();
+  if ($('.animating').length == 0) {
+    $card.toggleClass('selected');
+    checkSet();
+  }
 }
 
 function makeCardDivs() {
@@ -30,9 +32,7 @@ function makeCardDivs() {
   evtName = ('ontouchstart' in window) ? 'touchend' : 'click';
 
   $('.card').on(evtName, function(e) {
-    if ($('.animating').length == 0) {
-      toggleCard($(this));
-    }
+    toggleCard($(this));
     return false;
   })
 };
