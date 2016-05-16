@@ -30,8 +30,9 @@ function makeCardDivs() {
   evtName = ('ontouchstart' in window) ? 'touchend' : 'click';
 
   $('.card').on(evtName, function(e) {
-    toggleCard($(this));
-    print ('toggled', $(this));
+    if ($('.animating').length == 0) {
+      toggleCard($(this));
+    }
     return false;
   })
 };
@@ -80,28 +81,13 @@ makeCardDivs();
 layoutCardDivs();
 render();
 
-var animationCounter = 0;
 function startAnimation(set, callback) {
-  var cnt = ++animationCounter;
   animationTime = 400;
-  var steps = 20;
-  var t = 0;
-  $('.selected').removeClass('selected')
+  $('.selected .card-svg .shape').fadeOut(animationTime).addClass('animating');
+  var selected = $('.selected')
+  selected.removeClass('selected');
 
-  for (var i = 0; i < steps; ++i) {
-    set.map(function(j) {
-      var $card = getCardEl(j);
-      var _i = i;
-      setTimeout(function() {
-        if (animationCounter == cnt) { // TODO: remove this by assigning dummy
-          $('.shape', $card).css('opacity', '' + (1 - (_i + 1) / steps));
-        }
-      }
-      , t);
-    });
-    t += animationTime / steps;
-  }   
-  setTimeout(callback, t);
+  setTimeout(callback, animationTime);
 }
 
 startTime = Date.now();
@@ -111,6 +97,8 @@ function rerender() {
 }
 
 function help() {
+  if ($('.animating').length != 0) { return; }
+
   for (var i = 0; i < 12; ++i) {
     for (var j = i + 1; j < 12; ++j) {
       for (var k = j + 1; k < 12; ++k) {
