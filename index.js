@@ -3,9 +3,14 @@ var $el = $("#display");
 function restart() {
   deck = makeDeck();
   cards = deal12(deck);
+  makeCardDivs();
+  layoutCardDivs();
+
   startTime = Date.now();
   render();
 }
+
+restart();
 
 function lightDark() {
   $('body').toggleClass('light').toggleClass('dark');
@@ -23,14 +28,16 @@ function toggleCard($card) {
   }
 }
 
+var rows, cols;
 function makeCardDivs() {
-  $el.empty();
+  rows = 3;
+  cols = cards.length / rows;
+  print ({rows,cols});
 
-  for(var r = 0; r < 3; ++r) {
-    for(var c = 0; c < 4; ++c) {
-      var $elem = $('<div>').addClass('card');
-      $elem.appendTo($el);
-    }
+  $el.empty();
+  for (var i = 0; i < cards.length; ++i) {
+    var $elem = $('<div>').addClass('card');
+    $elem.appendTo($el);
   }
   $('.card').mousedown(function(e) {
     e.preventDefault(); // don't remember what this is for
@@ -50,14 +57,13 @@ function getCardEl(i) {
 
 function layoutCardDivs() { // set positions / sizes
   numCards = $('.card').length;
-  var unit = Math.min($el.width() / 10, $el.height() / 5);
+  var unit = Math.min($el.width() / (cols * 2 + 1), $el.height() / (rows + 1));
   var w = unit * 2, h = unit;
-  var rows = 3 + (numCards - 12) / 3;
 
-  for(var r = 0; r < rows; ++r) {
-    for(var c = 0; c < 4; ++c) {
-      var i = r * 4 + c;
-      var marginw = ($el.width() - (4 * unit * 2)) / 5, marginh = ($el.height() - (rows * unit)) / (rows + 1);
+  for(var c = 0; c < cols; ++c) {
+    for(var r = 0; r < rows; ++r) {
+      var i = r + rows * c;
+      var marginw = ($el.width() - (cols * unit * 2)) / (cols + 1), marginh = ($el.height() - (rows * unit)) / (rows + 1);
       var $elem = getCardEl(i);
       $elem.css({position: "absolute", left: marginw * (c + 1) + w * c, top: marginh * (r + 1) + h * r, width: w, height: h});;
     }
@@ -65,25 +71,16 @@ function layoutCardDivs() { // set positions / sizes
 }
 
 function render() { // draws svgs
-  for(var r = 0; r < 3; ++r) {
-    for(var c = 0; c < 4; ++c) {
-      var i = r * 4 + c;
-      var $parent = $($el.children()[i]);
-      $parent.empty();
-      if(cards[i] != null) {
-        var svgElem = makeCard(cards[i]);
-        svgElem.appendTo($parent);
-      }
+  for(var i = 0; i < cards.length; ++i) {
+    var $parent = $($el.children()[i]);
+    $parent.empty();
+    if(cards[i] != null) {
+      var svgElem = makeCard(cards[i]);
+      svgElem.appendTo($parent);
     }
   }
 }
 
-var deck = makeDeck();
-var cards = deal12(deck);
-
-makeCardDivs();
-layoutCardDivs();
-render();
 
 function startAnimation(set, callback) {
   animationTime = 400;
@@ -102,10 +99,9 @@ function rerender() {
 
 function help() {
   if ($('.animating').length != 0) { return; }
-
-  for (var i = 0; i < 12; ++i) {
-    for (var j = i + 1; j < 12; ++j) {
-      for (var k = j + 1; k < 12; ++k) {
+  for (var i = 0; i < cards.length; ++i) {
+    for (var j = i + 1; j < cards.length; ++j) {
+      for (var k = j + 1; k < cards.length; ++k) {
         if (isSet3([i, j, k])) {
           $('.selected').removeClass('selected');
           getCardEl(i).addClass('selected');
@@ -116,9 +112,22 @@ function help() {
       }
     }
   }
+
   if (deck.length > 0) {
-    deck = shuffle(deck.concat(cards));
-    cards = deal12(deck);
+    // deck = shuffle(deck.concat(cards));
+    // cards = deal12(deck);
+    if (deck.length >= 3) {
+      cards = cards.concat(deck.slice(0, 3));
+      deck = deck.slice(3);
+      print(cards.length);
+      print(cards);
+
+      makeCardDivs(cards.length);
+      layoutCardDivs();
+      render();
+    } else {
+      // game over, do nothing (for now)
+    }
     render();
   } else {
     // TODO: highlight reset button?
@@ -128,7 +137,7 @@ function help() {
 
 function checkSet() {
   var selectedCards = [];
-  for (var i = 0; i < 12; i++) {
+  for (var i = 0; i < cards.length; i++) {
     var $ch = getCardEl(i);
     if ($ch.hasClass('selected')) {
       selectedCards.push(i);
@@ -141,7 +150,7 @@ function checkSet() {
     if (set.length == 3) {
       return isSet3(set);
     } else if (set.length == 2) {
-      for (var i = 0; i < 12; ++i) {
+      for (var i = 0; i < cards.length; ++i) {
         var tmp = [set[0], set[1], i];
         if (isSet3(tmp)) {
           set.push(i);
@@ -157,8 +166,17 @@ function checkSet() {
   if (isGood(selectedCards)) {
     console.log("yay");
     startAnimation(selectedCards, function() {
-      for (var i of selectedCards) {
-        cards[i] = deck.pop();
+      if (cards.length <= 12) {
+        for (var i of selectedCards) {
+          cards[i] = deck.pop();
+        }
+      } else {
+        selectedCards.sort(function(a, b) { return b - a; })
+        for (var i of selectedCards) {
+          cards.splice(i, 1);
+        }
+        makeCardDivs();
+        layoutCardDivs();
       }
       rerender();
     });
@@ -180,7 +198,7 @@ $('#no-set').click(help);
 
 $('body').on('keypress', function(evt) {
   var code = evt.originalEvent.code;
-  var codes = ['KeyQ','KeyW','KeyE','KeyR','KeyA','KeyS','KeyD','KeyF','KeyZ','KeyX','KeyC','KeyV'];
+  var codes = ['KeyQ','KeyA','KeyZ','KeyW','KeyS','KeyX','KeyE','KeyD','KeyC','KeyR','KeyF','KeyV','KeyT','KeyG','KeyB','KeyY','KeyH','KeyN','KeyU','KeyJ','KeyM'];
   if (code == 'Enter' || code == 'Space') {
     checkSet();
   } else if (evt.shiftKey && code == 'KeyL') {
@@ -191,6 +209,8 @@ $('body').on('keypress', function(evt) {
     help();
   } else if (!evt.shiftKey && !evt.ctrlKey && !evt.altKey && codes.indexOf(code) != -1) {
     var i = codes.indexOf(code);
-    toggleCard(getCardEl(i));
+    if (i < cards.length) {
+      toggleCard(getCardEl(i));
+    }
   }
 });
