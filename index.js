@@ -40,7 +40,8 @@ function getCardEl(i) {
   return $($el.children()[i]);
 }
 
-function layoutCardDivs(numCards) { // set positions / sizes
+function layoutCardDivs() { // set positions / sizes
+  numCards = $('.card').length;
   var unit = Math.min($el.width() / 10, $el.height() / 5);
   var w = unit * 2, h = unit;
   var rows = 3 + (numCards - 12) / 3;
@@ -49,7 +50,8 @@ function layoutCardDivs(numCards) { // set positions / sizes
     for(var c = 0; c < 4; ++c) {
       var i = r * 4 + c;
       var marginw = ($el.width() - (4 * unit * 2)) / 5, marginh = ($el.height() - (rows * unit)) / (rows + 1);
-      var $elem = getCardEl(i).css({position: "absolute", left: marginw * (c + 1) + w * c, top: marginh * (r + 1) + h * r, width: w, height: h});;
+      var $elem = getCardEl(i);
+      $elem.css({position: "absolute", left: marginw * (c + 1) + w * c, top: marginh * (r + 1) + h * r, width: w, height: h});;
     }
   }
 }
