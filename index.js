@@ -12,7 +12,7 @@ function lightDark() {
   if ($('body').hasClass('light')) {
     $('#lightspan').html('off');
   } else {
-    $('#lightspan').html('off');
+    $('#lightspan').html('on');
   }
 }
 
