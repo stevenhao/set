@@ -6,7 +6,8 @@ var paths = {
 var placements = {1: "85,50", 2: "60,50", 3: "35,50"};
 var colors = ["red", "purple", "green"], shadings = ["open", "striped", "solid"], shapes = ["oval", "diamond", "squiggle"], counts = [1, 2, 3];
 
-makeCard = function(count, color, shading, shape) {
+makeCard = function(card) {
+  var count = counts[card.count], color = colors[card.color], shading = shadings[card.shading], shape = shapes[card.shape];
   var pth = "M" + placements[count] + " " + rep(paths[shape], count).join('m50,0 ');
 
   var svgElem = $$('svg');
