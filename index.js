@@ -1,10 +1,10 @@
 var $el = $("#display");
 
 function restart() {
-  deck = makeDeck()
-  cards = deal12(deck)
-  startTime = Date.now()
-  render()
+  deck = makeDeck();
+  cards = deal12(deck);
+  startTime = Date.now();
+  render();
 }
 
 function lightDark() {
@@ -65,10 +65,6 @@ function layoutCardDivs() { // set positions / sizes
 }
 
 function render() { // draws svgs
-  var unit = Math.min($el.width() / 10, $el.height() / 5);
-  var w = unit * 2, h = unit;
-  var marginw = ($el.width() - (4 * unit * 2)) / 5, marginh = ($el.height() - (3 * unit)) / 4;
-
   for(var r = 0; r < 3; ++r) {
     for(var c = 0; c < 4; ++c) {
       var i = r * 4 + c;
@@ -83,7 +79,7 @@ function render() { // draws svgs
 }
 
 var deck = makeDeck();
-var cards = deal12(deck)
+var cards = deal12(deck);
 
 makeCardDivs();
 layoutCardDivs();
@@ -111,23 +107,23 @@ function help() {
     for (var j = i + 1; j < 12; ++j) {
       for (var k = j + 1; k < 12; ++k) {
         if (isSet3([i, j, k])) {
-          $('.selected').removeClass('selected')
-          getCardEl(i).addClass('selected')
-          getCardEl(j).addClass('selected')
-          getCardEl(k).addClass('selected')
-          return 'found'
+          $('.selected').removeClass('selected');
+          getCardEl(i).addClass('selected');
+          getCardEl(j).addClass('selected');
+          getCardEl(k).addClass('selected');
+          return 'found';
         }
       }
     }
   }
   if (deck.length > 0) {
-    deck = shuffle(deck.concat(cards))
-    cards = deal12(deck)
-    render()
+    deck = shuffle(deck.concat(cards));
+    cards = deal12(deck);
+    render();
   } else {
     // TODO: highlight reset button?
   }
-  return 'not found'
+  return 'not found';
 }
 
 function checkSet() {
@@ -167,22 +163,22 @@ function checkSet() {
       rerender();
     });
   } else {
-    console.log("boo hoo")
+    console.log("boo hoo");
   }
   return false;
 }
 
-$('#light-dark').click(lightDark)
+$('#light-dark').click(lightDark);
 
 $(window).resize(layoutCardDivs);
 
 $('#restart').click(restart);
 
-$('#check-set').click(checkSet)
+$('#check-set').click(checkSet);
 
 $('#no-set').click(help);
 
-$('body').on('keydown', function(evt) {
+$('body').on('keypress', function(evt) {
   var code = evt.originalEvent.code;
   var codes = ['KeyQ','KeyW','KeyE','KeyR','KeyA','KeyS','KeyD','KeyF','KeyZ','KeyX','KeyC','KeyV'];
   if (code == 'Enter' || code == 'Space') {

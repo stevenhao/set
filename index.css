@@ -86,13 +86,13 @@ body {
   fill: none;
 }
 svg .stripe.red {
-  stroke: none;
+  stroke-width: 0;
 }
 svg .stripe.green {
-  stroke: none;
+  stroke-width: 0;
 }
 svg .stripe.purple {
-  stroke: none;
+  stroke-width: 0;
 }
 
 .dark {
@@ -117,33 +117,27 @@ svg .stripe.purple {
 .red.striped {
   stroke:url(#red-stripe);
   fill:url(#red-stripe);
-  /*-webkit-fill: url(#red-stripe) ;*/
 }
 .green.striped {
   stroke: url(#green-stripe);
   fill: url(#green-stripe) ;
-  /*-webkit-fill: url(#green-stripe) ;*/
 }
 .purple.striped {
   stroke: url(#purple-stripe);
   fill: url(#purple-stripe);
-  /*-webkit-fill: url(#purple-stripe) ;*/
 }
 @-moz-document url-prefix() { 
   .red.striped {
     stroke:url(/#red-stripe);
     fill:url(/#red-stripe);
-    /*-webkit-fill: url(#red-stripe) ;*/
   }
   .green.striped {
     stroke: url(/#green-stripe);
     fill: url(/#green-stripe) ;
-    /*-webkit-fill: url(#green-stripe) ;*/
   }
   .purple.striped {
     stroke: url(/#purple-stripe);
     fill: url(/#purple-stripe);
-    /*-webkit-fill: url(#purple-stripe) ;*/
   }
 }
 .light .green.striped {
