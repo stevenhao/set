@@ -12,17 +12,17 @@
     }
     $.attrHooks['viewbox'] = {
       set: function(elem, value, name) {
-       elem.setAttributeNS(null, 'viewBox', value + '');
-       return value;
-     }
-   };
-   $.attrHooks['class'] = {
-    set: function(elem, value, name) {
-     elem.setAttributeNS(null, 'class', value + '');
-     return value;
-   }
- };
-</script>
+        elem.setAttributeNS(null, 'viewBox', value + '');
+        return value;
+      }
+    };
+    $.attrHooks['class'] = {
+      set: function(elem, value, name) {
+        elem.setAttributeNS(null, 'class', value + '');
+        return value;
+      }
+    };
+  </script>
 </head>
 
 <body class="dark">

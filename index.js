@@ -92,7 +92,7 @@ function startAnimation(set, callback) {
 
 startTime = Date.now();
 
-function rerender() {  
+function rerender() {
   render();
 }
 
