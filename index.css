@@ -38,11 +38,6 @@
   stroke: #222;
 }
 
-.stripe {
-  width:4;
-  height:2;
-}
-
 .shape {
   stroke-width:4;
 }
@@ -64,7 +59,15 @@
 .light .open {
   fill: none;
 }
-
+svg .stripe.red {
+  stroke: none;
+}
+svg .stripe.green {
+  stroke: none;
+}
+svg .stripe.purple {
+  stroke: none;
+}
 
 .dark {
   background-color:black;
@@ -86,16 +89,16 @@
 }
 
 .red.striped {
-  stroke:url(#red-stripe);
-  fill: url(#red-stripe);
+  stroke:url(/#red-stripe);
+  fill: url(/#red-stripe);
 }
 .green.striped {
-  stroke: url(#green-stripe);
-  fill: url(#green-stripe);
+  stroke: url(/#green-stripe);
+  fill: url(/#green-stripe);
 }
 .purple.striped {
-  stroke: url(#purple-stripe);
-  fill: url(#purple-stripe);
+  stroke: url(/#purple-stripe);
+  fill: url(/#purple-stripe);
 }
 .light .green.striped {
   stroke: green;

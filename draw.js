@@ -12,8 +12,8 @@ makeCard = function(count, color, shading, shape) {
   var svgElem = $$('svg');
   svgElem.addClass("card-svg").attr("viewbox", "0 0 200 100");
 
-  var rect = $$('rect');
-  rect.addClass("card-back").appendTo(svgElem);
+  var rect = $$('path');
+  rect.attr("d", 'M0,0 l200,0 l0, 100 l-200,0 Z').addClass("card-back").appendTo(svgElem);
 
   var path = $$('path');
   path.addClass('shape').addClass(color).addClass(shading).attr("d", pth).appendTo(svgElem);
