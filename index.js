@@ -1,5 +1,12 @@
 var $el = $("#display");
 
+function restart() {
+  deck = makeDeck()
+  cards = deal12(deck)
+  startTime = Date.now()
+  render()
+}
+
 function lightDark() {
   $('body').toggleClass('light').toggleClass('dark');
   if ($('body').hasClass('light')) {
@@ -164,12 +171,7 @@ $('#light-dark').click(lightDark)
 
 $(window).resize(layoutCardDivs);
 
-$('#restart').click(function() {
-  deck = makeDeck()
-  cards = deal12(deck)
-  startTime = Date.now()
-  render()
-});
+$('#restart').click(restart);
 
 $('#check-set').click(checkSet)
 
@@ -178,13 +180,16 @@ $('#no-set').click(help);
 $('body').on('keydown', function(evt) {
   var code = evt.originalEvent.code;
   var codes = ['KeyQ','KeyW','KeyE','KeyR','KeyA','KeyS','KeyD','KeyF','KeyZ','KeyX','KeyC','KeyV'];
-  if (codes.indexOf(code) != -1) {
+  if (code == 'Enter' || code == 'Space') {
+    checkSet();
+  } else if (evt.shiftKey && code == 'KeyL') {
+    lightDark();
+  } else if (evt.shiftKey && code == 'KeyR') {
+    restart();
+  } else if (evt.shiftKey && code == 'KeyN') {
+    help();
+  } else if (!evt.shiftKey && !evt.ctrlKey && !evt.altKey && codes.indexOf(code) != -1) {
     var i = codes.indexOf(code);
     toggleCard(getCardEl(i));
-  };
-  if (code == 'Enter') {
-    checkSet();
-  } else if (code == 'Escape') {
-    lightDark();
   }
 });
