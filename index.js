@@ -72,11 +72,12 @@ function render() { // draws svgs
   for(var r = 0; r < 3; ++r) {
     for(var c = 0; c < 4; ++c) {
       var i = r * 4 + c;
-      var count = counts[cards[i].count], color = colors[cards[i].color], shading = shadings[cards[i].shading], shape = shapes[cards[i].shape];
-      var svgElem = makeCard(count, color, shading, shape);
       var $parent = $($el.children()[i]);
       $parent.empty();
-      svgElem.appendTo($parent);
+      if(cards[i] != null) {
+        var svgElem = makeCard(cards[i]);
+        svgElem.appendTo($parent);
+      }
     }
   }
 }
@@ -119,9 +120,13 @@ function help() {
       }
     }
   }
-  deck = shuffle(deck.concat(cards))
-  cards = deal12(deck)
-  render()
+  if (deck.length > 0) {
+    deck = shuffle(deck.concat(cards))
+    cards = deal12(deck)
+    render()
+  } else {
+    // TODO: highlight reset button?
+  }
   return 'not found'
 }
 
@@ -157,7 +162,7 @@ function checkSet() {
     console.log("yay");
     startAnimation(selectedCards, function() {
       for (var i of selectedCards) {
-        cards[i] = deck.pop(); // TODO: accomodate for end of deck
+        cards[i] = deck.pop();
       }
       rerender();
     });

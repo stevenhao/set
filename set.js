@@ -45,6 +45,9 @@ isSet3 = function(arr) {
     return (a + b + c) % 3 == 0
   }
   var dimen = ['count', 'color', 'shading', 'shape'];
+  for (i of arr) {
+    if (cards[i] == null) return false;
+  }
   for (d of dimen) {
     var x = cards[arr[0]][d], y = cards[arr[1]][d], z = cards[arr[2]][d];
     if (!isOkay(x, y, z)) {
