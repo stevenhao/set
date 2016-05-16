@@ -94,7 +94,7 @@ function startAnimation(set, callback) {
       var _i = i;
       setTimeout(function() {
         if (animationCounter == cnt) { // TODO: remove this by assigning dummy
-          $('path', $card).css('opacity', '' + (1 - (_i + 1) / steps));
+          $('.shape', $card).css('opacity', '' + (1 - (_i + 1) / steps));
         }
       }
       , t);
