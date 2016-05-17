@@ -24,13 +24,27 @@ body {
   border: 1px solid transparent;
   border-radius: 4px;
 }
-.large {
-  font-size: 18px;
-  line-height: 1.3333333;
+@media screen and (max-device-width : 1204px)
+{
+  .large {
+    font-size: 18px;
+    line-height: 1.3333333;
+  }
+  .small {
+    font-size: 12px;
+    line-height: 1.5;
+  }
 }
-.small {
-  font-size: 12px;
-  line-height: 1.5;
+@media screen and (max-device-width : 320px)
+{
+  .large {
+    font-size: 13.5px;
+    line-height: 1;
+  }
+  .small {
+    font-size: 9px;
+    line-height: 1.125;
+  }
 }
 .score {
   width:30%;

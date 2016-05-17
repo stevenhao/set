@@ -38,7 +38,7 @@ function makeCardDivs() {
 
 function layoutCardDivs() { // set positions / sizes
   numCards = $('.card').length;
-  var unit = Math.min($el.width() / (cols * 2 + 1), $el.height() / (rows + 1));
+  var unit = Math.min($el.width() / (cols * 2 + (cols + 1) * .15), $el.height() / (rows * 1 + (rows + 1) * .15));
   var w = unit * 2, h = unit;
 
   for(var c = 0; c < cols; ++c) {
