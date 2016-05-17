@@ -14,11 +14,6 @@ restart();
 
 function lightDark() {
   $('body').toggleClass('light').toggleClass('dark');
-  if ($('body').hasClass('light')) {
-    $('#lightspan').html('off');
-  } else {
-    $('#lightspan').html('on');
-  }
 }
 
 function getCardEl(i) {

@@ -46,6 +46,14 @@ body {
     line-height: 1.125;
   }
 }
+
+.light #light-dark:after {
+  content: "Lights off";
+}
+.dark #light-dark:after {
+  content: "Lights on";
+}
+
 .score {
   width:30%;
   height:20%;
