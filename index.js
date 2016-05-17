@@ -1,4 +1,4 @@
-var $el = $("#display");
+var $el = $('#display');
 
 function restart() {
   deck = makeDeck();
@@ -12,8 +12,22 @@ function restart() {
 
 restart();
 
+function setColorScheme(colorScheme) {
+  if (colorScheme == 'light') {
+    $('body').addClass('light').removeClass('dark');
+  } else if (colorScheme == 'dark') {
+    $('body').addClass('dark').removeClass('light');
+  }
+  if (typeof(Storage) !== 'undefined') {
+    localStorage.setItem('colorscheme', colorScheme);
+  }
+}
 function lightDark() {
-  $('body').toggleClass('light').toggleClass('dark');
+  if ($('body').hasClass('light')) {
+    setColorScheme('dark');
+  } else {
+    setColorScheme('light');
+  }
 }
 
 function getCardEl(i) {
@@ -100,7 +114,7 @@ function checkSet() {
     }
   }
   var diff = new Date(Date.now() - startTime);
-  console.log(""+pad2(diff.getMinutes())+":"+pad2(diff.getSeconds()));
+  console.log(''+pad2(diff.getMinutes())+':'+pad2(diff.getSeconds()));
 
   function isGood(set) {
     if (set.length == 3) {
@@ -120,7 +134,7 @@ function checkSet() {
   }
 
   if (isGood(selectedCards)) {
-    console.log("yay");
+    console.log('yay');
     startAnimation(selectedCards, function() {
       if (cards.length <= 12) {
         for (var i of selectedCards) {
@@ -137,7 +151,7 @@ function checkSet() {
       rerender();
     });
   } else {
-    console.log("boo hoo");
+    console.log('boo hoo');
   }
   return false;
 }
@@ -170,3 +184,10 @@ $('body').on('keypress', function(evt) {
     }
   }
 });
+
+if (typeof(Storage) !== 'undefined') {
+  var colorscheme = localStorage.getItem('colorscheme');
+  if (colorscheme != null) {
+    setColorScheme(colorscheme);
+  }
+}
