@@ -27,10 +27,10 @@ function makeCardDivs() {
   $('.card').mousedown(function(e) {
     e.preventDefault(); // don't remember what this is for
   });
-
-  evtName = ('ontouchstart' in window) ? 'touchend' : 'click';
+  evtName = ('ontouchstart' in window) ? 'touchstart' : 'click';
 
   $('.card').on(evtName, function(e) {
+    e.preventDefault();
     toggleCard($(this));
     return false;
   })
