@@ -21,52 +21,14 @@ function lightDark() {
   }
 }
 
-function toggleCard($card) {
-  if ($('.animating').length == 0) {
-    $card.toggleClass('selected');
-    checkSet();
-  }
-}
-
-var rows, cols;
-function makeCardDivs() {
-  rows = 3;
-  cols = cards.length / rows;
-  print ({rows,cols});
-
-  $el.empty();
-  for (var i = 0; i < cards.length; ++i) {
-    var $elem = $('<div>').addClass('card');
-    $elem.appendTo($el);
-  }
-  $('.card').mousedown(function(e) {
-    e.preventDefault(); // don't remember what this is for
-  });
-
-  evtName = ('ontouchstart' in window) ? 'touchend' : 'click';
-
-  $('.card').on(evtName, function(e) {
-    toggleCard($(this));
-    return false;
-  })
-};
-
 function getCardEl(i) {
   return $($el.children()[i]);
 }
 
-function layoutCardDivs() { // set positions / sizes
-  numCards = $('.card').length;
-  var unit = Math.min($el.width() / (cols * 2 + 1), $el.height() / (rows + 1));
-  var w = unit * 2, h = unit;
-
-  for(var c = 0; c < cols; ++c) {
-    for(var r = 0; r < rows; ++r) {
-      var i = r + rows * c;
-      var marginw = ($el.width() - (cols * unit * 2)) / (cols + 1), marginh = ($el.height() - (rows * unit)) / (rows + 1);
-      var $elem = getCardEl(i);
-      $elem.css({position: "absolute", left: marginw * (c + 1) + w * c, top: marginh * (r + 1) + h * r, width: w, height: h});;
-    }
+function toggleCard($card) {
+  if ($('.animating').length == 0) {
+    $card.toggleClass('selected');
+    checkSet();
   }
 }
 
@@ -80,7 +42,6 @@ function render() { // draws svgs
     }
   }
 }
-
 
 function startAnimation(set, callback) {
   animationTime = 400;
