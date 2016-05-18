@@ -13,8 +13,6 @@ function restart() {
   render();
 }
 
-restart();
-
 function setColorScheme(colorScheme) {
   if (colorScheme == 'light') {
     $('body').addClass('light').removeClass('dark');
@@ -188,6 +186,19 @@ function checkSet() {
   return false;
 }
 
+function registerCardHandlers($card) {
+  $card.mousedown(function(e) {
+    e.preventDefault(); // don't remember what this is for
+  });
+  evtName = ('ontouchstart' in window) ? 'touchstart' : 'click';
+
+  $card.on(evtName, function(e) {
+    e.preventDefault();
+    toggleCard($(this));
+    return false;
+  });
+}
+
 $('#light-dark').click(lightDark);
 
 $(window).on("orientationchange resize", layoutCardDivs);
@@ -223,3 +234,5 @@ if (typeof(Storage) !== 'undefined') {
     setColorScheme(colorscheme);
   }
 }
+
+restart();

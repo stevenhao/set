@@ -21,18 +21,9 @@ function makeCardDivs() {
   $el.empty();
   for (var i = 0; i < cards.length; ++i) {
     var $elem = $('<div>').addClass('card');
+    registerCardHandlers($elem);
     $elem.appendTo($el);
   }
-  $('.card').mousedown(function(e) {
-    e.preventDefault(); // don't remember what this is for
-  });
-  evtName = ('ontouchstart' in window) ? 'touchstart' : 'click';
-
-  $('.card').on(evtName, function(e) {
-    e.preventDefault();
-    toggleCard($(this));
-    return false;
-  })
 };
 
 function layoutCardDivs() { // set positions / sizes
