@@ -1,5 +1,6 @@
 var $el = $('#display');
 
+
 function restart() {
   deck = makeDeck();
   cards = deal12(deck);
@@ -173,7 +174,7 @@ function checkSet() {
 
 $('#light-dark').click(lightDark);
 
-$(window).resize(layoutCardDivs);
+$(window).on("orientationchange resize", layoutCardDivs);
 
 $('#restart').click(restart);
 
