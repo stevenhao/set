@@ -53,7 +53,8 @@ function render() { // draws svgs
   }
 }
 
-function fadeOutShapes(targets, callback, animationTime = 400) {
+function fadeOutShapes(targets, callback, animationTime) {
+  animationTime |= 400;
   for (var i of targets) {
     $('.shape', getCardEl(i)).fadeOut(animationTime).addClass('animating');
   }
@@ -64,7 +65,8 @@ function fadeOutShapes(targets, callback, animationTime = 400) {
   setTimeout(callback, animationTime);
 }
 
-function fadeOutCards(targets, callback, animationTime = 400) {
+function fadeOutCards(targets, callback, animationTime) {
+  animationTime |= 400;
   for (var i of targets) {
     getCardEl(i).fadeOut(animationTime).addClass('animating');
   }
