@@ -92,9 +92,6 @@ function help() {
     if (deck.length >= 3) {
       cards = cards.concat(deck.slice(0, 3));
       deck = deck.slice(3);
-      print(cards.length);
-      print(cards);
-
       makeCardDivs(cards.length);
       layoutCardDivs();
       render();

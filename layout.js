@@ -17,7 +17,6 @@ var rows, cols;
 function makeCardDivs() {
   rows = 3;
   cols = cards.length / rows;
-  print ({rows,cols});
 
   $el.empty();
   for (var i = 0; i < cards.length; ++i) {
