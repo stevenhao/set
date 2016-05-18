@@ -188,28 +188,27 @@ function checkSet() {
   return false;
 }
 
+var evtName = ('ontouchstart' in window) ? 'touchstart' : 'click';
+
 function registerCardHandlers($card) {
   $card.mousedown(function(e) {
     e.preventDefault(); // don't remember what this is for
   });
-  evtName = ('ontouchstart' in window) ? 'touchstart' : 'click';
 
   $card.on(evtName, function(e) {
-    e.preventDefault();
     toggleCard($(this));
-    return false;
   });
 }
 
-$('#light-dark').click(lightDark);
+$('#light-dark').on(evtName, lightDark);
 
 $(window).on("orientationchange resize", layoutCardDivs);
 
-$('#restart').click(restart);
+$('#restart').on(evtName, restart);
 
-$('#check-set').click(checkSet);
+$('#check-set').on(evtName, checkSet);
 
-$('#no-set').click(help);
+$('#no-set').on(evtName, help);
 
 $('body').on('keypress', function(evt) {
   var code = evt.originalEvent.code;
@@ -228,6 +227,11 @@ $('body').on('keypress', function(evt) {
       toggleCard(getCardEl(i));
     }
   }
+});
+
+$('body').on(evtName, function(e) {
+  // e.preventDefault();
+  return false;
 });
 
 if (typeof(Storage) !== 'undefined') {
