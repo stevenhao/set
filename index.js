@@ -55,12 +55,25 @@ function render() { // draws svgs
   }
 }
 
-function startAnimation(callback) {
-  animationTime = 400;
-  $('.selected .card-svg .shape').fadeOut(animationTime).addClass('animating');
-  var selected = $('.selected')
-  selected.removeClass('selected');
+function fadeOutShapes(targets, callback, animationTime = 400) {
+  for (var i of targets) {
+    $('.shape', getCardEl(i)).fadeOut(animationTime).addClass('animating');
+  }
 
+  setTimeout(function() {
+    $('.animating').removeClass('animating');
+  }, animationTime);
+  setTimeout(callback, animationTime);
+}
+
+function fadeOutCards(targets, callback, animationTime = 400) {
+  for (var i of targets) {
+    getCardEl(i).fadeOut(animationTime).addClass('animating');
+  }
+
+  setTimeout(function() {
+    $('.animating').removeClass('animating');
+  }, animationTime);
   setTimeout(callback, animationTime);
 }
 
@@ -87,30 +100,20 @@ function help() {
   }
 
   if (deck.length > 0) {
-    // deck = shuffle(deck.concat(cards));
-    // cards = deal12(deck);
-    if (deck.length >= 3) {
-      cards = cards.concat(deck.slice(0, 3));
-      deck = deck.slice(3);
-      makeCardDivs(cards.length);
-      layoutCardDivs();
-      render();
-    } else {
-      // game over, do nothing (for now)
-    }
+    cards = cards.concat(deck.slice(0, 3));
+    deck = deck.slice(3);
+    makeCardDivs(cards.length);
+    layoutCardDivs();
     render();
   } else {
+    var all = [];
     for (var i = 0; i < cards.length; i++) {
-      if (cards[i] != null) {
-        getCardEl(i).addClass('selected');
-      }
+      all.push(i);
     }
-    startAnimation(function() {
+    fadeOutCards(all, function() {
       cards = [];
-      makeCardDivs();
-      layoutCardDivs();
-      rerender();
-    });
+    }, 1500);
+    // TODO: simultaneously fade-in timer
   }
   return 'not found';
 }
@@ -145,24 +148,40 @@ function checkSet() {
 
   if (isGood(selectedCards)) {
     console.log('yay');
-    startAnimation(function() {
-      if (cards.length <= 12) {
-        for (var i of selectedCards) {
-          cards[i] = deck.pop();
-        }
+    if (cards.length <= 12) {
+      if (deck.length >= 3) {
+        fadeOutShapes(selectedCards, function() {
+          for (var i of selectedCards) {
+            cards[i] = deck.pop();
+          }
+          if (deck.length < 3) {
+            $('#no-set-text').html('Done');
+          }
+          rerender();
+        });
       } else {
+        fadeOutCards(selectedCards, function() {
+          for (var i of selectedCards) {
+            cards[i] = null;
+          }
+          makeCardDivs();
+          layoutCardDivs(); // TODO: animate the cards into the new layout
+
+          rerender();
+        }, 800);
+      }
+    } else {
+      fadeOutCards(selectedCards, function() {
         selectedCards.sort(function(a, b) { return b - a; })
         for (var i of selectedCards) {
           cards.splice(i, 1);
         }
         makeCardDivs();
         layoutCardDivs();
-      }
-      if (deck.length == 0) {
-        $('#no-set-text').html('Done');
-      }
-      rerender();
-    });
+        rerender();
+      });
+    }
+    $('.selected').removeClass('selected');
   } else {
     console.log('boo hoo');
   }
