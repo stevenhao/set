@@ -53,18 +53,8 @@ body {
 .dark #light-dark:after {
   content: "Lights on";
 }
-
-.score {
-  width:30%;
-  height:20%;
-  display:inline-block;
-}
 .card {
   cursor: pointer;
-}
-.card.small {
-  width:100px;
-  height:50px;
 }
 .light .selected .card-svg .card-back {
   stroke:orange;
