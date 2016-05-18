@@ -6,6 +6,8 @@ function restart() {
   makeCardDivs();
   layoutCardDivs();
 
+  $('#no-set-text').html('No Set');
+
   startTime = Date.now();
   render();
 }
@@ -52,7 +54,7 @@ function render() { // draws svgs
   }
 }
 
-function startAnimation(set, callback) {
+function startAnimation(callback) {
   animationTime = 400;
   $('.selected .card-svg .shape').fadeOut(animationTime).addClass('animating');
   var selected = $('.selected')
@@ -100,7 +102,17 @@ function help() {
     }
     render();
   } else {
-    // TODO: highlight reset button?
+    for (var i = 0; i < cards.length; i++) {
+      if (cards[i] != null) {
+        getCardEl(i).addClass('selected');
+      }
+    }
+    startAnimation(function() {
+      cards = [];
+      makeCardDivs();
+      layoutCardDivs();
+      rerender();
+    });
   }
   return 'not found';
 }
@@ -135,7 +147,7 @@ function checkSet() {
 
   if (isGood(selectedCards)) {
     console.log('yay');
-    startAnimation(selectedCards, function() {
+    startAnimation(function() {
       if (cards.length <= 12) {
         for (var i of selectedCards) {
           cards[i] = deck.pop();
@@ -147,6 +159,9 @@ function checkSet() {
         }
         makeCardDivs();
         layoutCardDivs();
+      }
+      if (deck.length == 0) {
+        $('#no-set-text').html('Done');
       }
       rerender();
     });
