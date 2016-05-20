@@ -53,6 +53,17 @@ function deal(deck, num) {
   return cards;
 }
 
+function listGT(a, b) { // a.length == b.length
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] > b[i]) {
+      return true;
+    } else if (a[i] < b[i]) {
+      return false;
+    }
+  }
+  return false;
+}
+
 Variants = {
   set: {
     makeDeck: makeStandardDeck,
@@ -76,6 +87,21 @@ Variants = {
         }
       }
       return null;
+    },
+
+    findNextSet: function(cards, prvSet) { // prvSet is sorted indices, cannot be null
+      for (var i = 0; i < cards.length; ++i) {
+        for (var j = i + 1; j < cards.length; ++j) {
+          for (var k = j + 1; k < cards.length; ++k) {
+            if (cards[i] != null && cards[j] != null && cards[k] != null) {
+              if (listGT([i, j, k], prvSet) && isStandardSet([cards[i], cards[j], cards[k]])) {
+                return [i, j, k];
+              }
+            }
+          }
+        }
+      }
+      return this.findSet(cards);
     },
 
     tableSize: 12,
@@ -106,8 +132,25 @@ Variants = {
         }
       }
       return null;
-
     },
+
+    findNextSet: function(cards, prvSet) { // prvSet is sorted indices, cannot be null
+      for (var i = 0; i < cards.length; ++i) {
+        for (var j = i + 1; j < cards.length; ++j) {
+          for (var k = j + 1; k < cards.length; ++k) {
+            for(var l = k + 1; l < cards.length; ++l) {
+              if (cards[i] != null && cards[j] != null && cards[k] != null && cards[l] != null) {
+                if (listGT([i, j, k, l], prvSet) && isPowerSet([cards[i], cards[j], cards[k], cards[l]])) {
+                  return [i, j, k, l];
+                }
+              }
+            }
+          }
+        }
+      }
+      return this.findSet(cards);
+    },
+
 
     tableSize: 9,
     tableIncrement: 4,

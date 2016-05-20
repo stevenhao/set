@@ -46,7 +46,7 @@ function toggleCard($card) {
   if (!isAnimating()) {
     $card.toggleClass('selected');
     if (fastMode) {
-      checkSet();
+      checkAndClearSet();
     }
   }
 }
@@ -96,6 +96,9 @@ function help() {
     return;
   }
   var ans = currentVariant.findSet(cards);
+  if (checkSet()) { // already a set, so move to the next one.
+    ans = currentVariant.findNextSet(cards, getSelectedCards());
+  }
   if (ans != null) {
     $('.selected').removeClass('selected');
     for (var i of ans) {
@@ -124,15 +127,18 @@ function help() {
   return 'not found';
 }
 
-function checkSet() {
-  var selectedCards = [];
+function getSelectedCards() {
+  var ret = [];
   for (var i = 0; i < cards.length; i++) {
     var $ch = getCardEl(i);
     if ($ch.hasClass('selected')) {
-      selectedCards.push(i);
+      ret.push(i);
     }
   }
-  var diff = new Date(Date.now() - startTime);
+  return ret;
+}
+
+function checkSet() {
   function isSet(set) {
     var cardsSet = [];
     for(var i of set) {
@@ -143,6 +149,7 @@ function checkSet() {
     }
     return currentVariant.isSet(cardsSet);
   }
+
   function isGood(set) {
     if (isSet(set)) {
       return true;
@@ -158,9 +165,14 @@ function checkSet() {
     }
     return false;
   }
+  return isGood(getSelectedCards());
+}
 
-  if (isGood(selectedCards)) {
+function checkAndClearSet() {
+  if (checkSet()) {
+    var diff = new Date(Date.now() - startTime);
     console.log(''+pad2(diff.getMinutes())+':'+pad2(diff.getSeconds()));
+    var selectedCards = getSelectedCards();
     if (cards.length <= currentVariant.tableSize) {
       if (deck.length >= selectedCards.length) {
         fadeOutShapes(selectedCards, function() {
@@ -217,7 +229,7 @@ $(window).on("orientationchange resize", layoutCardDivs);
 
 $('#restart').on(evtName, restart);
 
-$('#check-set').on(evtName, checkSet);
+$('#check-set').on(evtName, checkAndClearSet);
 
 $('#no-set').on(evtName, help);
 
@@ -225,7 +237,7 @@ $('body').on('keypress', function(evt) {
   var code = evt.originalEvent.code;
   var codes = ['KeyQ','KeyA','KeyZ','KeyW','KeyS','KeyX','KeyE','KeyD','KeyC','KeyR','KeyF','KeyV','KeyT','KeyG','KeyB','KeyY','KeyH','KeyN','KeyU','KeyJ','KeyM'];
   if (code == 'Enter' || code == 'Space') {
-    checkSet();
+    checkAndClearSet();
   } else if (evt.shiftKey && code == 'KeyL') {
     lightDark();
   } else if (evt.shiftKey && code == 'KeyR') {
