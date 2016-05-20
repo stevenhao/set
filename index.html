@@ -8,26 +8,6 @@
   <link rel="stylesheet" href="index.css">
   <link rel="apple-touch-icon" sizes="57x57" href="set-icon.png"/>
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
-
-  <script>
-    var xmlns = "http://www.w3.org/2000/svg";
-    window.$$ = function(tag) {
-      var el = document.createElementNS(xmlns, tag);
-      return $(el);
-    }
-    $.attrHooks['viewbox'] = {
-      set: function(elem, value, name) {
-        elem.setAttributeNS(null, 'viewBox', value + '');
-        return value;
-      }
-    };
-    $.attrHooks['class'] = {
-      set: function(elem, value, name) {
-        elem.setAttributeNS(null, 'class', value + '');
-        return value;
-      }
-    };
-  </script>
 </head>
 
 <body class="dark">

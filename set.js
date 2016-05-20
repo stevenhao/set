@@ -1,21 +1,3 @@
-function rep(val, n) {
-  var ret = [];
-  for(var i = 0; i < n; ++i) {
-    ret.push(val);
-  }
-  return ret;
-}
-
-shuffle = function(deck) {
-  for (var i = 0; i < deck.length; ++i) {
-    var tmp = deck[i]
-    var j = Math.floor(Math.random() * i);
-    deck[i] = deck[j];
-    deck[j] = tmp;
-  }
-  return deck;
-}
-
 makeDeck = function() {
   var deck = []
   for(var i = 0; i < 81; ++i) {
