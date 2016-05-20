@@ -105,9 +105,10 @@ function help() {
   }
 
   if (deck.length > 0) {
-    cards = cards.concat(deck.slice(0, 3));
-    deck = deck.slice(3);
-    makeCardDivs(cards.length);
+    var add = Math.min(currentVariant.tableIncrement, deck.length);
+    cards = cards.concat(deck.slice(0, add));
+    deck = deck.slice(add);
+    makeCardDivs();
     layoutCardDivs();
     render();
   } else if (cards.length > 0) {
@@ -160,13 +161,13 @@ function checkSet() {
 
   if (isGood(selectedCards)) {
     console.log(''+pad2(diff.getMinutes())+':'+pad2(diff.getSeconds()));
-    if (cards.length <= 12) {
-      if (deck.length >= 3) {
+    if (cards.length <= currentVariant.tableSize) {
+      if (deck.length >= selectedCards.length) {
         fadeOutShapes(selectedCards, function() {
           for (var i of selectedCards) {
             cards[i] = deck.pop();
           }
-          if (deck.length < 3) {
+          if (deck.length == 0) {
             $('#no-set-text').html('Done');
           }
           rerender();
@@ -174,7 +175,7 @@ function checkSet() {
       } else {
         fadeOutCards(selectedCards, function() {
           for (var i of selectedCards) {
-            cards[i] = null;
+            cards[i] = deck.pop();
           }
           makeCardDivs();
           layoutCardDivs(); // TODO: animate the cards into the new layout

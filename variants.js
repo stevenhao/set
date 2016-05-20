@@ -27,14 +27,19 @@ function isStandardSet(set) {
 function isPowerSet(set) {
   if (set.length == 4) {
     for (var j of [1, 2, 3]) {
+      var cnt = 0;
       for (z of ['count', 'color', 'shading', 'shape']) {
         var a = set[0][z], b = set[j][z];
         var cd = set[1][z] + set[2][z] + set[3][z] - b;
         if ((a + b - cd) % 3 != 0) {
-          return false;
+          continue;
+        } else {
+          ++cnt;
         }
       }
-      return true;
+      if (cnt == 4) {
+        return true;
+      }
     }
   }
   return false;
@@ -53,7 +58,7 @@ Variants = {
     makeDeck: makeStandardDeck,
 
     deal: function(deck) {
-      return deal(deck, 12);
+      return deal(deck, this.tableSize);
     },
 
     isSet: isStandardSet,
@@ -71,14 +76,17 @@ Variants = {
         }
       }
       return null;
-    }
+    },
+
+    tableSize: 12,
+    tableIncrement: 3,
   },
 
   powerset: {
     makeDeck: makeStandardDeck,
 
     deal: function(deck) {
-      return deal(deck, 12);
+      return deal(deck, this.tableSize);
     },
 
     isSet: isPowerSet,
@@ -99,6 +107,9 @@ Variants = {
       }
       return null;
 
-    }
+    },
+
+    tableSize: 9,
+    tableIncrement: 4,
   },
 }
