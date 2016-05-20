@@ -1,14 +1,13 @@
 var $el = $('#display');
-defaultAnimationTime = 400;
 
 function isAnimating() {
   return $('.animating').length > 0;
 }
 
-function restart() {
+function start() {
   if (!isAnimating()) {
-    deck = makeDeck();
-    cards = deal12(deck);
+    deck = currentVariant.makeDeck();
+    cards = currentVariant.deal(deck);
     makeCardDivs();
     layoutCardDivs();
 
@@ -18,6 +17,8 @@ function restart() {
     render();
   }
 }
+
+restart = start;
 
 function setColorScheme(colorScheme) {
   if (colorScheme == 'light') {
@@ -44,7 +45,9 @@ function getCardEl(i) {
 function toggleCard($card) {
   if (!isAnimating()) {
     $card.toggleClass('selected');
-    checkSet();
+    if (fastMode) {
+      checkSet();
+    }
   }
 }
 
@@ -83,7 +86,6 @@ function fadeOutCards(targets, callback, animationTime) {
   setTimeout(callback, animationTime);
 }
 
-startTime = Date.now();
 
 function rerender() {
   render();
@@ -93,18 +95,13 @@ function help() {
   if (isAnimating()) {
     return;
   }
-  for (var i = 0; i < cards.length; ++i) {
-    for (var j = i + 1; j < cards.length; ++j) {
-      for (var k = j + 1; k < cards.length; ++k) {
-        if (isSet3([i, j, k])) {
-          $('.selected').removeClass('selected');
-          getCardEl(i).addClass('selected');
-          getCardEl(j).addClass('selected');
-          getCardEl(k).addClass('selected');
-          return 'found';
-        }
-      }
+  var ans = currentVariant.findSet(cards);
+  if (ans != null) {
+    $('.selected').removeClass('selected');
+    for (var i of ans) {
+      getCardEl(i).addClass('selected');
     }
+    return 'found';
   }
 
   if (deck.length > 0) {
@@ -135,21 +132,30 @@ function checkSet() {
     }
   }
   var diff = new Date(Date.now() - startTime);
+  function isSet(set) {
+    var cardsSet = [];
+    for(var i of set) {
+      if (cards[i] == null) {
+        return false;
+      }
+      cardsSet.push(cards[i]);
+    }
+    return currentVariant.isSet(cardsSet);
+  }
   function isGood(set) {
-    if (set.length == 3) {
-      return isSet3(set);
-    } else if (set.length == 2) {
+    if (isSet(set)) {
+      return true;
+    } else if (set.length == 2 && fastMode) {
       for (var i = 0; i < cards.length; ++i) {
         var tmp = [set[0], set[1], i];
-        if (isSet3(tmp)) {
+        if (isSet(tmp)) {
           set.push(i);
           getCardEl(i).addClass('selected'); // do i really need this
           return true;
         }
       }
-    } else {
-      return false;
     }
+    return false;
   }
 
   if (isGood(selectedCards)) {
@@ -244,5 +250,3 @@ if (typeof(Storage) !== 'undefined') {
     setColorScheme(colorscheme);
   }
 }
-
-restart();
