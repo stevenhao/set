@@ -135,8 +135,6 @@ function checkSet() {
     }
   }
   var diff = new Date(Date.now() - startTime);
-  console.log(''+pad2(diff.getMinutes())+':'+pad2(diff.getSeconds()));
-
   function isGood(set) {
     if (set.length == 3) {
       return isSet3(set);
@@ -155,7 +153,7 @@ function checkSet() {
   }
 
   if (isGood(selectedCards)) {
-    console.log('yay');
+    console.log(''+pad2(diff.getMinutes())+':'+pad2(diff.getSeconds()));
     if (cards.length <= 12) {
       if (deck.length >= 3) {
         fadeOutShapes(selectedCards, function() {
@@ -190,8 +188,6 @@ function checkSet() {
       });
     }
     $('.selected').removeClass('selected');
-  } else {
-    console.log('boo hoo');
   }
   return false;
 }
