@@ -1,16 +1,22 @@
 var $el = $('#display');
+defaultAnimationTime = 400;
 
+function isAnimating() {
+  return $('.animating').length > 0;
+}
 
 function restart() {
-  deck = makeDeck();
-  cards = deal12(deck);
-  makeCardDivs();
-  layoutCardDivs();
+  if (!isAnimating()) {
+    deck = makeDeck();
+    cards = deal12(deck);
+    makeCardDivs();
+    layoutCardDivs();
 
-  $('#no-set-text').html('No Set');
+    $('#no-set-text').html('No Set');
 
-  startTime = Date.now();
-  render();
+    startTime = Date.now();
+    render();
+  }
 }
 
 function setColorScheme(colorScheme) {
@@ -36,7 +42,7 @@ function getCardEl(i) {
 }
 
 function toggleCard($card) {
-  if ($('.animating').length == 0) {
+  if (!isAnimating()) {
     $card.toggleClass('selected');
     checkSet();
   }
@@ -54,7 +60,7 @@ function render() { // draws svgs
 }
 
 function fadeOutShapes(targets, callback, animationTime) {
-  animationTime |= 400;
+  animationTime = animationTime || defaultAnimationTime;
   for (var i of targets) {
     $('.shape', getCardEl(i)).fadeOut(animationTime).addClass('animating');
   }
@@ -66,7 +72,7 @@ function fadeOutShapes(targets, callback, animationTime) {
 }
 
 function fadeOutCards(targets, callback, animationTime) {
-  animationTime |= 400;
+  animationTime = animationTime || defaultAnimationTime;
   for (var i of targets) {
     getCardEl(i).fadeOut(animationTime).addClass('animating');
   }
@@ -84,7 +90,9 @@ function rerender() {
 }
 
 function help() {
-  if ($('.animating').length != 0) { return; }
+  if (isAnimating()) {
+    return;
+  }
   for (var i = 0; i < cards.length; ++i) {
     for (var j = i + 1; j < cards.length; ++j) {
       for (var k = j + 1; k < cards.length; ++k) {
@@ -105,7 +113,7 @@ function help() {
     makeCardDivs(cards.length);
     layoutCardDivs();
     render();
-  } else {
+  } else if (cards.length > 0) {
     var all = [];
     for (var i = 0; i < cards.length; i++) {
       all.push(i);
