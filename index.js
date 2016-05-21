@@ -117,15 +117,6 @@ function getSelectedCards() {
   return ret;
 }
 
-function toggleCard($card) {
-  if (!isAnimating()) {
-    $card.toggleClass('selected');
-    if ($card.hasClass('selected') && fastMode) { 
-      assistSet(); // only assist when fastmode
-    }
-  }
-}
-
 function fadeOutShapes(targets, callback, animationTime) {
   animationTime = animationTime || defaultAnimationTime;
   for (var i of targets) {
@@ -278,6 +269,7 @@ function assistSet() {
 var holdCount = 0;
 var defaultHoldTime = 10000;
 var holdUntil = 0;
+var holdState = false; // true if deselecting
 
 function resetHolds() {
   holdUntil = 0;
@@ -304,6 +296,23 @@ function release() {
 
   if (holdCount == 0 && holdState == false && fastMode) {
     checkAndClearSet();
+  }
+}
+
+function toggleCard($card) {
+  if (!isAnimating()) {
+    var state = $card.hasClass('selected');
+    if (holdCount == 0) {
+      holdState = state;
+    }
+    if (holdCount > 0 && holdState != state) {
+      return;
+    }
+
+    $card.toggleClass('selected');
+    if ($card.hasClass('selected') && fastMode) {
+      assistSet(); // only assist when fastmode
+    }
   }
 }
 
