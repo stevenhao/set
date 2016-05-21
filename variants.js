@@ -6,7 +6,7 @@ function makeStandardDeck() {
     var b = cur % 3; cur = (cur - b) / 3;
     var c = cur % 3; cur = (cur - c) / 3;
     var z = cur;
-    deck.push({count: a, color: b, shading: c, shape: z});
+    deck.push({type: '3^4', count: a, color: b, shading: c, shape: z});
   }
   return shuffle(deck);
 }
@@ -61,6 +61,9 @@ function deal(deck) {
 }
 
 function listGT(a, b) {
+  if (a.length != b.length) {
+    return a.length > b.length;
+  }
   for (var i = 0; i < a.length && i < b.length; ++i) {
     if (a[i] > b[i]) {
       return true;
@@ -146,8 +149,70 @@ setLastCardHidden = {
   tableIncrement: 3,
 }
 
+function makeProSetDeck() {
+  var deck = [];
+  for (var i = 1; i < 64; ++i) {
+    deck.push({type: '2^6', value: i});
+  }
+  return shuffle(deck);
+}
+
+function isProset(set) {
+  if (isNotNull(set)) {
+    if (set.length > 0) {
+      var tot = 0;
+      for (var i of set) {
+        tot ^= i.value;
+      }
+      if (tot == 0) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function findProset(cards, previous) {
+  var n = cards.length;
+  var best = null;
+  var first = null;
+  for (var i = 1; i < (1 << n); ++i) {
+    var set = [], setCards = [];
+    for(var j = 0; j < n; ++j) {
+      if (i & (1 << j)) {
+        set.push(j);
+        setCards.push(cards[j]);
+      }
+    }
+    if (isProset(setCards)) {
+      print ('found ', i);
+      if (previous == null || listGT(set, previous)) {
+        if (best == null || listGT(best, set)) {
+          best = set;
+        }
+      }
+    }
+  }
+  if (best == null && previous != null) {
+    best = findProset(cards, null);
+  }
+  return best;
+}
+
+proset = {
+  name: 'Pro Set',
+  makeDeck: makeProSetDeck,
+  deal: deal,
+  isSet: isProset,
+  findSet: findProset,
+  findNextSet: findProset,
+  tableSize: 7,
+  tableIncrement: 1, // mathematically impossible to have no-set
+}
+
 Variants = {
   set: set,
   powerset: powerset,
-  hidelast: setLastCardHidden
+  hidelast: setLastCardHidden,
+  proset: proset
 }

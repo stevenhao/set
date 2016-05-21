@@ -94,6 +94,18 @@ body {
   stroke: #5A1398;
   fill: #5A1398;
 }
+.light .blue {
+  stroke: blue;
+  fill: blue;
+}
+.light .yellow {
+  stroke: gray;
+  fill: gray;
+}
+.light .orange {
+  stroke: darkorange;
+  fill: darkorange;
+}
 .light .open {
   fill: none;
 }
@@ -121,6 +133,18 @@ svg .stripe.purple {
 .dark .red {
   stroke:yellow;
   fill: yellow;
+}
+.dark .blue {
+  stroke: lightblue;
+  fill: lightblue;
+}
+.dark .yellow {
+  stroke: lightyellow;
+  fill: lightyellow;
+}
+.dark .orange {
+  stroke:orange;
+  fill: orange;
 }
 .dark .open {
   fill: none;
