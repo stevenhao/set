@@ -4,21 +4,18 @@ function isAnimating() {
   return $('.animating').length > 0;
 }
 
-function start() {
+function newGame() {
   if (!isAnimating()) {
     deck = currentVariant.makeDeck();
     cards = currentVariant.deal(deck);
     makeCardDivs();
     layoutCardDivs();
-
-    $('#no-set-text').html('No Set');
-
-    startTime = Date.now();
+    setLabels();
     render();
+    startTime = Date.now();
+    saveGame();
   }
 }
-
-restart = start;
 
 function setColorScheme(colorScheme) {
   if (colorScheme == 'light') {
@@ -30,6 +27,55 @@ function setColorScheme(colorScheme) {
     localStorage.setItem('colorscheme', colorScheme);
   }
 }
+
+function loadGame() {
+  var gameid = currentVariant.name;
+  if (typeof(Storage) !== 'undefined' && localStorage.getItem(gameid) != null) {
+    var game = JSON.parse(localStorage.getItem(gameid));
+    if (game != null && game.cards != null) {
+      cards = game.cards;
+      deck = game.deck;
+      startTime = game.startTime;
+      makeCardDivs();
+      layoutCardDivs();
+      setLabels();
+      render();
+      return true;
+    }
+  }
+  return false;
+}
+
+function saveGame() {
+  var gameid = currentVariant.name;
+  if (typeof(Storage) !== 'undefined') {
+    localStorage.setItem(gameid, JSON.stringify({cards: cards, deck: deck, startTime: startTime}));
+  }
+}
+
+restart = newGame;
+
+function start() {
+  try {
+    if (loadGame()) {
+      print('successfully loaded game');
+    } else {
+      newGame();
+    }
+  } catch(e) {
+    print('failed to load game');
+    newGame();
+  }
+}
+
+function setLabels() {
+  if (deck.length > 0) {
+    $('#no-set-text').html('No Set');
+  } else {
+    $('#no-set-text').html('Done!');
+  }
+}
+
 function lightDark() {
   if ($('body').hasClass('light')) {
     setColorScheme('dark');
@@ -89,6 +135,7 @@ function fadeOutCards(targets, callback, animationTime) {
 
 function rerender() {
   render();
+  setLabels();
 }
 
 function help() {
@@ -114,6 +161,7 @@ function help() {
     makeCardDivs();
     layoutCardDivs();
     render();
+    saveGame();
   } else if (cards.length > 0) {
     var all = [];
     for (var i = 0; i < cards.length; i++) {
@@ -121,6 +169,7 @@ function help() {
     }
     fadeOutCards(all, function() {
       cards = [];
+      saveGame();
     }, 1500);
     // TODO: simultaneously fade-in timer
   }
@@ -179,10 +228,8 @@ function checkAndClearSet() {
           for (var i of selectedCards) {
             cards[i] = deck.pop();
           }
-          if (deck.length == 0) {
-            $('#no-set-text').html('Done');
-          }
           rerender();
+          saveGame();
         });
       } else {
         fadeOutCards(selectedCards, function() {
@@ -193,6 +240,7 @@ function checkAndClearSet() {
           layoutCardDivs(); // TODO: animate the cards into the new layout
 
           rerender();
+          saveGame();
         }, 800);
       }
     } else {
@@ -204,6 +252,7 @@ function checkAndClearSet() {
         makeCardDivs();
         layoutCardDivs();
         rerender();
+        saveGame();
       });
     }
     $('.selected').removeClass('selected');
