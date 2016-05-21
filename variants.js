@@ -110,27 +110,30 @@ function naiveSetFinder(setSize, isSet) {
   return findSet;
 }
 
+set = {
+  name: 'Set',
+  makeDeck: makeStandardDeck,
+  deal: deal,
+  isSet: isStandardSet,
+  findSet: naiveSetFinder(3, isStandardSet),
+  findNextSet: naiveSetFinder(3, isStandardSet),
+  tableSize: 12,
+  tableIncrement: 3,
+}
+
+powerset = {
+  name: 'Power Set',
+  makeDeck: makeStandardDeck,
+  deal: deal,
+  isSet: isPowerSet,
+
+  findSet: naiveSetFinder(4, isPowerSet),
+  findNextSet: naiveSetFinder(4, isPowerSet),
+  tableSize: 9,
+  tableIncrement: 2,
+}
+
 Variants = {
-  set: {
-    name: 'Set',
-    makeDeck: makeStandardDeck,
-    deal: deal,
-    isSet: isStandardSet,
-    findSet: naiveSetFinder(3, isStandardSet),
-    findNextSet: naiveSetFinder(3, isStandardSet),
-    tableSize: 12,
-    tableIncrement: 3,
-  },
-
-  powerset: {
-    name: 'Power Set',
-    makeDeck: makeStandardDeck,
-    deal: deal,
-    isSet: isPowerSet,
-
-    findSet: naiveSetFinder(4, isPowerSet),
-    findNextSet: naiveSetFinder(4, isPowerSet),
-    tableSize: 7,
-    tableIncrement: 1,
-  },
+  set: set,
+  powerset: powerset,
 }
