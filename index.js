@@ -142,10 +142,13 @@ function help() {
   if (isAnimating()) {
     return;
   }
-  var ans = currentVariant.findSet(cards);
+  var ans;
   if (checkSet()) { // already a set, so move to the next one.
     ans = currentVariant.findNextSet(cards, getSelectedCards());
+  } else {
+    ans = currentVariant.findSet(cards);
   }
+
   if (ans != null) {
     $('.selected').removeClass('selected');
     for (var i of ans) {
@@ -234,7 +237,11 @@ function checkAndClearSet() {
       } else {
         fadeOutCards(selectedCards, function() {
           for (var i of selectedCards) {
-            cards[i] = deck.pop();
+            if (deck.length > 0) {
+              cards[i] = deck.pop();
+            } else {
+              cards[i] = null;
+            }
           }
           makeCardDivs();
           layoutCardDivs(); // TODO: animate the cards into the new layout
