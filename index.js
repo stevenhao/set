@@ -1,8 +1,29 @@
 var $el = $('#display');
 
-function isAnimating() {
-  return $('.animating').length > 0;
+function setLabels() {
+  if (deck.length > 0) {
+    $('#no-set-text').html('No Set');
+  } else {
+    $('#no-set-text').html('Done!');
+  }
 }
+
+function render() { // draws svgs
+  for(var i = 0; i < cards.length; ++i) {
+    var $parent = $($el.children()[i]);
+    $parent.empty();
+    if(cards[i] != null) {
+      var svgElem = makeCard(cards[i]);
+      svgElem.appendTo($parent);
+    }
+  }
+}
+
+function rerender() {
+  render();
+  setLabels();
+}
+
 
 function newGame() {
   if (!isAnimating()) {
@@ -68,14 +89,6 @@ function start() {
   }
 }
 
-function setLabels() {
-  if (deck.length > 0) {
-    $('#no-set-text').html('No Set');
-  } else {
-    $('#no-set-text').html('Done!');
-  }
-}
-
 function lightDark() {
   if ($('body').hasClass('light')) {
     setColorScheme('dark');
@@ -88,22 +101,26 @@ function getCardEl(i) {
   return $($el.children()[i]);
 }
 
+function isAnimating() {
+  return $('.animating').length > 0;
+}
+
+function getSelectedCards() {
+  var ret = [];
+  for (var i = 0; i < cards.length; i++) {
+    var $ch = getCardEl(i);
+    if ($ch.hasClass('selected')) {
+      ret.push(i);
+    }
+  }
+  return ret;
+}
+
 function toggleCard($card) {
   if (!isAnimating()) {
     $card.toggleClass('selected');
-    if (fastMode) {
-      checkAndClearSet();
-    }
-  }
-}
-
-function render() { // draws svgs
-  for(var i = 0; i < cards.length; ++i) {
-    var $parent = $($el.children()[i]);
-    $parent.empty();
-    if(cards[i] != null) {
-      var svgElem = makeCard(cards[i]);
-      svgElem.appendTo($parent);
+    if ($card.hasClass('selected') && fastMode) { 
+      assistSet(); // only assist when fastmode
     }
   }
 }
@@ -132,92 +149,20 @@ function fadeOutCards(targets, callback, animationTime) {
   setTimeout(callback, animationTime);
 }
 
-
-function rerender() {
-  render();
-  setLabels();
-}
-
-function help() {
-  if (isAnimating()) {
-    return;
-  }
-  var ans;
-  if (checkSet()) { // already a set, so move to the next one.
-    ans = currentVariant.findNextSet(cards, getSelectedCards());
-  } else {
-    ans = currentVariant.findSet(cards);
-  }
-
-  if (ans != null) {
-    $('.selected').removeClass('selected');
-    for (var i of ans) {
-      getCardEl(i).addClass('selected');
+function isSet(set) {
+  var cardsSet = [];
+  for(var i of set) {
+    if (cards[i] == null) {
+      return false;
     }
-    return 'found';
+    cardsSet.push(cards[i]);
   }
-
-  if (deck.length > 0) {
-    var add = Math.min(currentVariant.tableIncrement, deck.length);
-    cards = cards.concat(deck.slice(deck.length - add));
-    deck = deck.slice(0, deck.length - add);
-    makeCardDivs();
-    layoutCardDivs();
-    render();
-    saveGame();
-  } else if (cards.length > 0) {
-    var all = [];
-    for (var i = 0; i < cards.length; i++) {
-      all.push(i);
-    }
-    fadeOutCards(all, function() {
-      cards = [];
-      saveGame();
-    }, 1500);
-    // TODO: simultaneously fade-in timer
-  }
-  return 'not found';
-}
-
-function getSelectedCards() {
-  var ret = [];
-  for (var i = 0; i < cards.length; i++) {
-    var $ch = getCardEl(i);
-    if ($ch.hasClass('selected')) {
-      ret.push(i);
-    }
-  }
-  return ret;
+  return currentVariant.isSet(cardsSet);
 }
 
 function checkSet() {
-  function isSet(set) {
-    var cardsSet = [];
-    for(var i of set) {
-      if (cards[i] == null) {
-        return false;
-      }
-      cardsSet.push(cards[i]);
-    }
-    return currentVariant.isSet(cardsSet);
-  }
-
-  function isGood(set) {
-    if (isSet(set)) {
-      return true;
-    } else if (set.length == 2 && fastMode) {
-      for (var i = 0; i < cards.length; ++i) {
-        var tmp = [set[0], set[1], i];
-        if (isSet(tmp)) {
-          set.push(i);
-          getCardEl(i).addClass('selected'); // do i really need this
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-  return isGood(getSelectedCards());
+  var set = getSelectedCards();
+  return isSet(set);
 }
 
 function checkAndClearSet() {
@@ -266,33 +211,136 @@ function checkAndClearSet() {
       });
     }
     $('.selected').removeClass('selected');
+    resetHolds();
   }
   return false;
 }
 
-var evtName = ('ontouchstart' in window) ? 'touchstart' : 'click';
+function help() {
+  if (isAnimating()) {
+    return;
+  }
+  var ans;
+  if (checkSet()) { // already a set, so move to the next one.
+    ans = currentVariant.findNextSet(cards, getSelectedCards());
+  } else {
+    ans = currentVariant.findSet(cards);
+  }
+
+  if (ans != null) {
+    $('.selected').removeClass('selected');
+    for (var i of ans) {
+      getCardEl(i).addClass('selected');
+    }
+    return 'found';
+  } else {
+    if (deck.length > 0) {
+      var add = Math.min(currentVariant.tableIncrement, deck.length);
+      cards = cards.concat(deck.slice(deck.length - add));
+      deck = deck.slice(0, deck.length - add);
+      makeCardDivs();
+      layoutCardDivs();
+      rerender();
+      saveGame();
+    } else { // game over
+      if (cards.length > 0) { // game over animation
+        var all = [];
+        for (var i = 0; i < cards.length; i++) {
+          all.push(i);
+        }
+        fadeOutCards(all, function() {
+          cards = [];
+          saveGame(); // TODO: add end of game buttons
+        }, 1500);
+      }
+    }
+    return 'not found';
+  }
+}
+
+function assistSet() {
+  var set = getSelectedCards();
+  if (set.length == 2 && fastMode) {
+    for (var i = 0; i < cards.length; ++i) {
+      var tmp = [set[0], set[1], i];
+      if (isSet(tmp)) {
+        set.push(i);
+        getCardEl(i).addClass('selected'); // do i really need this
+        return true;
+      }
+    }
+  }
+  return;
+}
+
+// fast mode
+var holdCount = 0;
+var defaultHoldTime = 10000;
+var holdUntil = 0;
+
+function resetHolds() {
+  holdUntil = 0;
+  holdCount = 0;
+}
+
+function clearHolds() {
+  if (Date.now() >= holdUntil) {
+    holdCount = 0;
+  }
+}
+
+function hold(holdTime) {
+  holdTime = holdTime || defaultHoldTime;
+  print('holding');
+  holdCount += 1;
+  holdUntil = Math.max(holdUntil, Date.now() + holdTime);
+  setTimeout(clearHolds, holdTime + 10);
+}
+
+function release() {
+  print('releasing');
+  if (holdCount > 0) {
+    holdCount -= 1;
+  }
+
+  if (holdCount == 0 && holdState == false && fastMode) {
+    checkAndClearSet();
+  }
+}
+
+var clickStart = ('ontouchstart' in window) ? 'touchstart' : 'mousedown';
+var clickEnd = ('ontouchstart' in window) ? 'touchend' : 'mouseup';
+var dragLeave = 'dragleave';
 
 function registerCardHandlers($card) {
-  $card.mousedown(function(e) {
-    e.preventDefault(); // don't remember what this is for
+  $card.on(clickStart, function(e) {
+    e.preventDefault();
+    toggleCard($(this));
+    hold();
+    return false;
   });
 
-  $card.on(evtName, function(e) {
-    toggleCard($(this));
+  $card.on(clickEnd, function(e) {
+    release();
+    return false;
   });
 }
 
-$('#light-dark').on(evtName, lightDark);
+$('#light-dark').on(clickStart, lightDark);
 
 $(window).on("orientationchange resize", layoutCardDivs);
 
-$('#restart').on(evtName, restart);
+$('#restart').on(clickStart, restart);
 
-$('#check-set').on(evtName, checkAndClearSet);
+$('#check-set').on(clickStart, checkAndClearSet);
 
-$('#no-set').on(evtName, help);
+$('#no-set').on(clickStart, help);
 
-$('body').on('keypress', function(evt) {
+$('body').on('keydown', function(evt) {
+  if (evt.originalEvent.repeat) {
+    return;
+  }
+
   var code = evt.originalEvent.code;
   var codes = ['KeyQ','KeyA','KeyZ','KeyW','KeyS','KeyX','KeyE','KeyD','KeyC','KeyR','KeyF','KeyV','KeyT','KeyG','KeyB','KeyY','KeyH','KeyN','KeyU','KeyJ','KeyM'];
   if (code == 'Enter' || code == 'Space') {
@@ -303,18 +351,34 @@ $('body').on('keypress', function(evt) {
     restart();
   } else if (evt.shiftKey && code == 'KeyN') {
     help();
-  } else if (!evt.shiftKey && !evt.ctrlKey && !evt.altKey && codes.indexOf(code) != -1) {
-    var i = codes.indexOf(code);
-    if (i < cards.length) {
-      toggleCard(getCardEl(i));
+  } else if (codes.indexOf(code) != -1) {
+    if (!evt.shiftKey && !evt.ctrlKey && !evt.altKey) {
+      var i = codes.indexOf(code);
+      if (i < cards.length) {
+        toggleCard(getCardEl(i));
+        hold();
+      }
     }
   }
 });
 
-$('body').on(evtName, function(e) {
-  // e.preventDefault();
+$('body').on('keyup ', function(evt) {
+  var code = evt.originalEvent.code;
+  var codes = ['KeyQ','KeyA','KeyZ','KeyW','KeyS','KeyX','KeyE','KeyD','KeyC','KeyR','KeyF','KeyV','KeyT','KeyG','KeyB','KeyY','KeyH','KeyN','KeyU','KeyJ','KeyM'];
+  if (codes.indexOf(code) != -1) {
+    if (!evt.shiftKey && !evt.ctrlKey && !evt.altKey) {
+      var i = codes.indexOf(code);
+      if (i < cards.length) {
+        release();
+      }
+    }
+  }
+});
+
+$('body').on(clickStart, function(e) {
   return false;
 });
+
 
 if (typeof(Storage) !== 'undefined') {
   var colorscheme = localStorage.getItem('colorscheme');
