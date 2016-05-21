@@ -133,7 +133,24 @@ powerset = {
   tableIncrement: 2,
 }
 
+setLastCardHidden = {
+  name: 'Set',
+  makeDeck: function() {
+    var ret = makeStandardDeck();
+    // ret[ret.length - 1].hidden = true;
+    ret[0].hidden = true;
+    return ret;
+  },
+  deal: deal,
+  isSet: isStandardSet,
+  findSet: naiveSetFinder(3, isStandardSet),
+  findNextSet: naiveSetFinder(3, isStandardSet),
+  tableSize: 12,
+  tableIncrement: 3,
+}
+
 Variants = {
   set: set,
   powerset: powerset,
+  hidelast: setLastCardHidden
 }

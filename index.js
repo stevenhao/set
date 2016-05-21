@@ -159,8 +159,8 @@ function help() {
 
   if (deck.length > 0) {
     var add = Math.min(currentVariant.tableIncrement, deck.length);
-    cards = cards.concat(deck.slice(0, add));
-    deck = deck.slice(add);
+    cards = cards.concat(deck.slice(deck.length - add));
+    deck = deck.slice(0, deck.length - add);
     makeCardDivs();
     layoutCardDivs();
     render();

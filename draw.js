@@ -16,7 +16,17 @@ makeCard = function(card) {
   var rect = $$('path');
   rect.attr("d", 'M0,0 l200,0 l0, 100 l-200,0 Z').addClass("card-back").appendTo(svgElem);
 
-  var path = $$('path');
-  path.addClass('shape').addClass(color).addClass(shading).attr("d", pth).appendTo(svgElem);
+  if (card.hidden) {
+    var wdth = 5;
+    for(var i = 40; i >= 0; i -= 15) {
+      var circ = $$('circle');
+      circ.attr('stroke', 'gray').attr('stroke-width', wdth).attr('fill', 'none');
+      circ.attr('cx', 100).attr('cy', 50).attr('r', i).appendTo(svgElem);
+      wdth += 1;
+    }
+  } else {
+    var path = $$('path');
+    path.addClass('shape').addClass(color).addClass(shading).attr("d", pth).appendTo(svgElem);
+  }
   return svgElem;
 }
