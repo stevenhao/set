@@ -73,8 +73,6 @@ function listGT(a, b) {
 
 function naiveSetFinder(setSize, isSet) {
   function findSet(cards, previous) {
-    print('finding set in ', cards);
-    print('previous = ', previous);
     function recurse(partial, lastIndex) {
       if (partial.length >= setSize) {
         if (previous == null || listGT(partial, previous)) {
@@ -104,7 +102,6 @@ function naiveSetFinder(setSize, isSet) {
       previous = null;
       ret = recurse([], [], 0);
     }
-    print('returning', ret);
     return ret;
   }
   return findSet;

@@ -36,6 +36,7 @@ function newGame() {
     startTime = Date.now();
     saveGame();
   }
+  print('started new game')
 }
 
 function setColorScheme(colorScheme) {
@@ -79,12 +80,12 @@ restart = newGame;
 function start() {
   try {
     if (loadGame()) {
-      print('successfully loaded game');
+      print('successfully loaded game from memory');
     } else {
       newGame();
     }
   } catch(e) {
-    print('failed to load game');
+    print('failed to load game from memory');
     newGame();
   }
 }
@@ -291,14 +292,12 @@ function clearHolds() {
 
 function hold(holdTime) {
   holdTime = holdTime || defaultHoldTime;
-  print('holding');
   holdCount += 1;
   holdUntil = Math.max(holdUntil, Date.now() + holdTime);
   setTimeout(clearHolds, holdTime + 10);
 }
 
 function release() {
-  print('releasing');
   if (holdCount > 0) {
     holdCount -= 1;
   }
