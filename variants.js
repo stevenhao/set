@@ -130,7 +130,7 @@ Variants = {
 
     findSet: naiveSetFinder(4, isPowerSet),
     findNextSet: naiveSetFinder(4, isPowerSet),
-    tableSize: 9,
-    tableIncrement: 4,
+    tableSize: 7,
+    tableIncrement: 1,
   },
 }

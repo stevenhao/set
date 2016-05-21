@@ -256,6 +256,9 @@ function checkAndClearSet() {
         for (var i of selectedCards) {
           cards.splice(i, 1);
         }
+        while (deck.length > 0 && cards.length < currentVariant.tableSize) { // if addCards != setSizes
+          cards.push(deck.pop());
+        }
         makeCardDivs();
         layoutCardDivs();
         rerender();
