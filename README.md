@@ -1,2 +1,2 @@
 # set
-Play at <http://set2.stevenhao.com>
+Play at <http://set.stevenhao.com>
