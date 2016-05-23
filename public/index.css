@@ -1,9 +1,9 @@
 body {
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  color: #666;
 }
 .btn {
   box-sizing: border-box;
-  color: #666;
   display: inline-block;
   padding: 6px 12px;
   margin-bottom: 0;
@@ -24,8 +24,11 @@ body {
   border: 1px solid transparent;
   border-radius: 4px;
 }
-@media screen and (max-device-width : 1204px)
+@media screen and (min-width : 1025px) /* Desktop */
 {
+  .huge {
+    font-size: 300px;
+  }
   .large {
     font-size: 18px;
     line-height: 1.3333333;
@@ -35,8 +38,35 @@ body {
     line-height: 1.5;
   }
 }
-@media screen and (max-device-width : 320px)
+@media screen and (max-width : 1024px) /* Tablet */
 {
+  .huge {
+    font-size: 300px;
+  }
+  .large {
+    font-size: 27px;
+  }
+  .small {
+    font-size: 18px;
+  }
+}
+@media screen and (max-width : 768px) /* Phone Landscape/Tablet Portrait */
+{
+  .huge {
+    font-size: 200px;
+  }
+  .large {
+    font-size: 18px;
+  }
+  .small {
+    font-size: 12px;
+  }
+}
+@media screen and (max-width : 450px) /* Phone Portrait */
+{
+  .huge {
+    font-size: 130px;
+  }
   .large {
     font-size: 13.5px;
     line-height: 1;

@@ -1,4 +1,5 @@
-var $el = $('#display');
+var $body = $(document.body);
+var $display = $('#display');
 
 function setLabels() {
   if (deck.length > 0) {
@@ -10,7 +11,7 @@ function setLabels() {
 
 function render() { // draws svgs
   for(var i = 0; i < cards.length; ++i) {
-    var $parent = $($el.children()[i]);
+    var $parent = $($display.children()[i]);
     $parent.empty();
     if(cards[i] != null) {
       var svgElem = makeCard(cards[i]);
@@ -41,9 +42,9 @@ function newGame() {
 
 function setColorScheme(colorScheme) {
   if (colorScheme == 'light') {
-    $('body').addClass('light').removeClass('dark');
+    $body.addClass('light').removeClass('dark');
   } else if (colorScheme == 'dark') {
-    $('body').addClass('dark').removeClass('light');
+    $body.addClass('dark').removeClass('light');
   }
   if (typeof(Storage) !== 'undefined') {
     localStorage.setItem('colorscheme', colorScheme);
@@ -91,7 +92,7 @@ function start() {
 }
 
 function lightDark() {
-  if ($('body').hasClass('light')) {
+  if ($body.hasClass('light')) {
     setColorScheme('dark');
   } else {
     setColorScheme('light');
@@ -99,7 +100,7 @@ function lightDark() {
 }
 
 function getCardEl(i) {
-  return $($el.children()[i]);
+  return $($display.children()[i]);
 }
 
 function isAnimating() {
@@ -344,7 +345,7 @@ $('#check-set').on(clickStart, checkAndClearSet);
 
 $('#no-set').on(clickStart, help);
 
-$('body').on('keydown', function(evt) {
+$body.on('keydown', function(evt) {
   if (evt.originalEvent.repeat) {
     return;
   }
@@ -359,6 +360,8 @@ $('body').on('keydown', function(evt) {
     restart();
   } else if (evt.shiftKey && code == 'KeyN') {
     help();
+  } else if (evt.shiftKey && code == 'KeyF') {
+    toggleFullScreen();
   } else if (codes.indexOf(code) != -1) {
     if (!evt.shiftKey && !evt.ctrlKey && !evt.altKey) {
       var i = codes.indexOf(code);
@@ -370,7 +373,7 @@ $('body').on('keydown', function(evt) {
   }
 });
 
-$('body').on('keyup ', function(evt) {
+$body.on('keyup ', function(evt) {
   var code = evt.originalEvent.code;
   var codes = ['KeyQ','KeyA','KeyZ','KeyW','KeyS','KeyX','KeyE','KeyD','KeyC','KeyR','KeyF','KeyV','KeyT','KeyG','KeyB','KeyY','KeyH','KeyN','KeyU','KeyJ','KeyM'];
   if (codes.indexOf(code) != -1) {
@@ -383,7 +386,7 @@ $('body').on('keyup ', function(evt) {
   }
 });
 
-$('body').on(clickStart, function(e) {
+$body.on(clickStart, function(e) {
   return false;
 });
 
