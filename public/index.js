@@ -267,7 +267,7 @@ function assistSet() {
 
 // fast mode
 var holdCount = 0;
-var defaultHoldTime = 10000;
+var defaultHoldTime = 1000;
 var holdUntil = 0;
 var holdState = false; // true if deselecting
 
