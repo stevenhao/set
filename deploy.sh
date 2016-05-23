@@ -1,1 +1,1 @@
-rsync -v * ec2:set/
+rsync -rv * ec2:set/
