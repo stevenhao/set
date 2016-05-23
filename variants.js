@@ -31,7 +31,7 @@ function isStandardSet(set) {
   return false;
 }
 
-function isPowerSet(set) {
+function issuperset(set) {
   if (isNotNull(set) && set.length == 4) {
     for (var j of [1, 2, 3]) {
       var cnt = 0;
@@ -121,14 +121,14 @@ set = {
   tableIncrement: 3,
 }
 
-powerset = {
-  name: 'Power Set',
+superset = {
+  name: 'Super Set',
   makeDeck: makeStandardDeck,
   deal: deal,
-  isSet: isPowerSet,
+  isSet: issuperset,
 
-  findSet: naiveSetFinder(4, isPowerSet),
-  findNextSet: naiveSetFinder(4, isPowerSet),
+  findSet: naiveSetFinder(4, issuperset),
+  findNextSet: naiveSetFinder(4, issuperset),
   tableSize: 9,
   tableIncrement: 2,
 }
@@ -199,8 +199,8 @@ function findProset(cards, previous) {
   return best;
 }
 
-proset = {
-  name: 'Pro Set',
+powerset = {
+  name: 'Power Set',
   makeDeck: makeProSetDeck,
   deal: deal,
   isSet: isProset,
@@ -212,7 +212,7 @@ proset = {
 
 Variants = {
   set: set,
-  powerset: powerset,
+  superset: superset,
   hidelast: setLastCardHidden,
-  proset: proset
+  powerset: powerset
 }
