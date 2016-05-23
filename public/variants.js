@@ -85,8 +85,6 @@ function naiveSetFinder(setSize, isSet) {
           }
         }
         return null;
-      } else if (previous != null && listGT(previous, partial)) {
-        return null;
       } else {
         for (var i = lastIndex + 1; i < cards.length; ++i) {
           var nxt = partial.slice();
