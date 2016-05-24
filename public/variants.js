@@ -98,10 +98,10 @@ function naiveSetFinder(setSize, isSet) {
       return null;
     }
 
-    var ret = recurse([], [], 0);
+    var ret = recurse([], -1);
     if (ret == null && previous != null) {
       previous = null;
-      ret = recurse([], [], 0);
+      ret = recurse([], -1);
     }
     return ret;
   }
