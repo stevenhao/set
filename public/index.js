@@ -421,7 +421,7 @@ function registerCardHandlers($card) {
 
 $('#light-dark').on(clickStart, lightDark);
 
-$(window).on("orientationchange resize", layoutCardDivs);
+$(window).on("orientationchange resize", function() {layoutCardDivs(); rerender();});
 
 $restart.on(clickStart, restart);
 $restartBig.on(clickStart, restart);
