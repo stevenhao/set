@@ -4,7 +4,6 @@ body {
 }
 .btn {
   box-sizing: border-box;
-  display: inline-block;
   padding: 6px 12px;
   margin-bottom: 0;
   font-size: 14px;
@@ -24,12 +23,28 @@ body {
   border: 1px solid transparent;
   border-radius: 4px;
 }
+.clock {
+  position: absolute;
+  width: 100%;
+  top: 35%;
+  transform: translateY(-50%);
+  padding: 6px 12px;
+  text-align: center;
+  margin: 0 auto;
+}
+#restartBig {
+  position: absolute;
+  left: 50%;
+  bottom: 0%;
+  transform: translateX(-50%);
+  text-align: center;
+}
 @media screen and (min-width : 1025px) /* Desktop */
 {
   .huge {
     font-size: 300px;
   }
-  .large {
+  .medium {
     font-size: 18px;
     line-height: 1.3333333;
   }
@@ -43,7 +58,7 @@ body {
   .huge {
     font-size: 300px;
   }
-  .large {
+  .medium {
     font-size: 27px;
   }
   .small {
@@ -55,7 +70,7 @@ body {
   .huge {
     font-size: 200px;
   }
-  .large {
+  .medium {
     font-size: 18px;
   }
   .small {
@@ -67,7 +82,7 @@ body {
   .huge {
     font-size: 130px;
   }
-  .large {
+  .medium {
     font-size: 13.5px;
     line-height: 1;
   }

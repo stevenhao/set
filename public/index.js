@@ -1,5 +1,49 @@
 var $body = $(document.body);
 var $display = $('#display');
+var $clock = $('#clock');
+var $restartBig = $('#restartBig')
+var $restart = $('#restart')
+var $noSet = $('#no-set');
+var $checkSet = $('#check-set');
+var gameOver = false;
+
+function getClockTime() {
+  var diff = new Date(Date.now() - startTime);
+  return ''+pad2(diff.getMinutes())+':'+pad2(diff.getSeconds())
+}
+
+function showClock(animationTime) {
+  $clock.html(getClockTime());
+  $clock.addClass('animating');
+  $clock.fadeIn(animationTime);
+  setTimeout(function() {
+    $clock.removeClass('animating');
+  }, animationTime);
+}
+
+function showRestartBig(animationTime) {
+  $restartBig.addClass('animating');
+  $restartBig.fadeIn(animationTime);
+  setTimeout(function() {
+    $restartBig.removeClass('animating');
+  }, animationTime);
+}
+
+function endGame() {
+  var all = [];
+  for (var i = 0; i < cards.length; i++) {
+    all.push(i);
+  }
+  $noSet.fadeOut(1500);
+  $checkSet.fadeOut(1500);
+  fadeOutCards(all, 1500);
+  setTimeout(function() {
+    cards = [];
+    saveGame(); 
+    showClock(2000);
+    showRestartBig(3000);
+  }, 500);
+}
 
 function setLabels() {
   if (deck.length > 0) {
@@ -25,19 +69,67 @@ function rerender() {
   setLabels();
 }
 
+function rewindClock(animationTime) {
+  var s = $clock.html();
+  var time = 0;
+  var step = animationTime / 40;
+  function fiddle(str) {
+    var ret = '';
+    for (var i = 0; i < str.length; ++i) {
+      if (str[i] == ':') {
+        ret += ':';
+      } else {
+        var ch = str.charCodeAt(i) - '0'.charCodeAt(0);
+        ch = (ch + rand(3) + 9) % 10 + '0'.charCodeAt(0);
+        ret += String.fromCharCode(ch);
+      }
+    }
+    return ret;
+  }
+  for (var i = 0; i < 30; ++i) {
+    setTimeout(function() {
+      s = fiddle(s);
+      $clock.html(s);
+    }.bind(i), time);
+    time += step;
+  }
+  for(var i = 9; i >= 1; --i) {
+    setTimeout(function() {
+      var pattern = new RegExp('' + this, "g");
+      s = s.replace(pattern, this - 1);
+      $clock.html(s);
+    }.bind(i), time);
+    time += step;
+  }
+}
 
 function newGame() {
   if (!isAnimating()) {
-    deck = currentVariant.makeDeck();
-    cards = currentVariant.deal(deck);
-    makeCardDivs();
-    layoutCardDivs();
-    setLabels();
-    render();
-    startTime = Date.now();
-    saveGame();
+    function go() {
+      deck = currentVariant.makeDeck();
+      cards = currentVariant.deal(deck);
+      makeCardDivs();
+      layoutCardDivs();
+      setLabels();
+      render();
+      $noSet.fadeIn();
+      $checkSet.fadeIn();
+
+      startTime = Date.now();
+      saveGame();
+      print('started new game')
+      gameOver = false;
+    }
+
+    if (gameOver) {
+      rewindClock(700);
+      $clock.fadeOut(1100);
+      $(restartBig).fadeOut(400);
+      setTimeout(go, 1000)
+    } else {
+      go();
+    }
   }
-  print('started new game')
 }
 
 function setColorScheme(colorScheme) {
@@ -118,8 +210,7 @@ function getSelectedCards() {
   return ret;
 }
 
-function fadeOutShapes(targets, callback, animationTime) {
-  animationTime = animationTime || defaultAnimationTime;
+function fadeOutShapes(targets, animationTime) {
   for (var i of targets) {
     $('.shape', getCardEl(i)).fadeOut(animationTime).addClass('animating');
   }
@@ -127,11 +218,9 @@ function fadeOutShapes(targets, callback, animationTime) {
   setTimeout(function() {
     $('.animating').removeClass('animating');
   }, animationTime);
-  setTimeout(callback, animationTime);
 }
 
-function fadeOutCards(targets, callback, animationTime) {
-  animationTime = animationTime || defaultAnimationTime;
+function fadeOutCards(targets, animationTime) {
   for (var i of targets) {
     getCardEl(i).fadeOut(animationTime).addClass('animating');
   }
@@ -139,7 +228,6 @@ function fadeOutCards(targets, callback, animationTime) {
   setTimeout(function() {
     $('.animating').removeClass('animating');
   }, animationTime);
-  setTimeout(callback, animationTime);
 }
 
 function isSet(set) {
@@ -160,20 +248,21 @@ function checkSet() {
 
 function checkAndClearSet() {
   if (checkSet()) {
-    var diff = new Date(Date.now() - startTime);
-    console.log(''+pad2(diff.getMinutes())+':'+pad2(diff.getSeconds()));
+    console.log(getClockTime());
     var selectedCards = getSelectedCards();
     if (cards.length <= currentVariant.tableSize) {
       if (deck.length >= selectedCards.length) {
-        fadeOutShapes(selectedCards, function() {
+        fadeOutShapes(selectedCards, defaultAnimationTime);
+        setTimeout(function() {
           for (var i of selectedCards) {
             cards[i] = deck.pop();
           }
           rerender();
           saveGame();
-        });
+        }, defaultAnimationTime);
       } else {
-        fadeOutCards(selectedCards, function() {
+        fadeOutCards(selectedCards, 800);
+        setTimeout(function() {
           for (var i of selectedCards) {
             if (deck.length > 0) {
               cards[i] = deck.pop();
@@ -189,7 +278,8 @@ function checkAndClearSet() {
         }, 800);
       }
     } else {
-      fadeOutCards(selectedCards, function() {
+      fadeOutCards(selectedCards, defaultAnimationTime);
+      setTimeout(function() {
         selectedCards.sort(function(a, b) { return b - a; })
         for (var i of selectedCards) {
           cards.splice(i, 1);
@@ -198,10 +288,10 @@ function checkAndClearSet() {
           cards.push(deck.pop());
         }
         makeCardDivs();
-        layoutCardDivs();
+        layoutCardDivs();// TODO: animate the cards into the new layout
         rerender();
         saveGame();
-      });
+      }, 800);
     }
     $('.selected').removeClass('selected');
     resetHolds();
@@ -236,15 +326,9 @@ function help() {
       rerender();
       saveGame();
     } else { // game over
+      gameOver = true;
       if (cards.length > 0) { // game over animation
-        var all = [];
-        for (var i = 0; i < cards.length; i++) {
-          all.push(i);
-        }
-        fadeOutCards(all, function() {
-          cards = [];
-          saveGame(); // TODO: add end of game buttons
-        }, 1500);
+        endGame();
       }
     }
     return 'not found';
@@ -339,11 +423,12 @@ $('#light-dark').on(clickStart, lightDark);
 
 $(window).on("orientationchange resize", layoutCardDivs);
 
-$('#restart').on(clickStart, restart);
+$restart.on(clickStart, restart);
+$restartBig.on(clickStart, restart);
 
-$('#check-set').on(clickStart, checkAndClearSet);
+$checkSet.on(clickStart, checkAndClearSet);
 
-$('#no-set').on(clickStart, help);
+$noSet.on(clickStart, help);
 
 $body.on('keydown', function(evt) {
   if (evt.originalEvent.repeat) {

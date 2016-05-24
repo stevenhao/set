@@ -15,10 +15,14 @@ function rep(val, n) {
   return ret;
 }
 
+function rand(x) {
+  return Math.floor(Math.random() * x);
+}
+
 function shuffle(lst) {
   for (var i = 0; i < lst.length; ++i) {
     var tmp = lst[i]
-    var j = Math.floor(Math.random() * i);
+    var j = rand(i);
     lst[i] = lst[j];
     lst[j] = tmp;
   }
