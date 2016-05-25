@@ -49,7 +49,7 @@ function makeProsetCard(card) {
       if (card.value & (1 << i)) {
         var cx = 50 * (1 + (i % 3));
         var cy = 33 * (Math.floor(i / 3) + 1);
-        var circ = $$('circle').attr('cx', cx).attr('cy', cy).attr('r', 7).addClass(colors[i]).addClass('shape');
+        var circ = $$('circle').attr('cx', cx).attr('cy', cy).addClass(colors[i]).addClass('shape').addClass('circle');
         circ.appendTo(svgElem);
       }
     }

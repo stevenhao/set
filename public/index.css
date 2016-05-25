@@ -167,6 +167,10 @@ svg .stripe.purple {
 .dark {
   background-color:black;
 }
+.circle {
+  stroke-width: 0;
+  r: 11.7;
+}
 .dark .green {
   stroke: cyan;
   fill: cyan;
@@ -176,20 +180,20 @@ svg .stripe.purple {
   fill: magenta;
 }
 .dark .red {
-  stroke:yellow;
+  stroke: yellow;
   fill: yellow;
 }
 .dark .blue {
-  stroke: lightblue;
-  fill: lightblue;
+  stroke: #9546CC;
+  fill: #9546CC;
 }
 .dark .yellow {
-  stroke: lightyellow;
-  fill: lightyellow;
+  stroke: orange;
+  fill: orange;
 }
 .dark .orange {
-  stroke:orange;
-  fill: orange;
+  stroke: #49BF3D;
+  fill: #49BF3D;
 }
 .dark .open {
   fill: none;
