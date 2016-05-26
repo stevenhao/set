@@ -31,7 +31,7 @@ function isStandardSet(set) {
   return false;
 }
 
-function issuperset(set) {
+function isSuperSet(set) {
   if (isNotNull(set) && set.length == 4) {
     for (var j of [1, 2, 3]) {
       var cnt = 0;
@@ -123,10 +123,10 @@ superset = {
   name: 'Super Set',
   makeDeck: makeStandardDeck,
   deal: deal,
-  isSet: issuperset,
+  isSet: isSuperSet,
 
-  findSet: naiveSetFinder(4, issuperset),
-  findNextSet: naiveSetFinder(4, issuperset),
+  findSet: naiveSetFinder(4, isSuperSet),
+  findNextSet: naiveSetFinder(4, isSuperSet),
   tableSize: 9,
   tableIncrement: 2,
 }
@@ -147,7 +147,7 @@ setLastCardHidden = {
   tableIncrement: 3,
 }
 
-function makeProSetDeck() {
+function makePowerSetDeck() {
   var deck = [];
   for (var i = 1; i < 64; ++i) {
     deck.push({type: '2^6', value: i});
@@ -155,7 +155,7 @@ function makeProSetDeck() {
   return shuffle(deck);
 }
 
-function isProset(set) {
+function isPowerSet(set) {
   if (isNotNull(set)) {
     if (set.length > 0) {
       var tot = 0;
@@ -170,7 +170,7 @@ function isProset(set) {
   return false;
 }
 
-function findProset(cards, previous) {
+function findPowerSet(cards, previous) {
   var n = cards.length;
   var best = null;
   var first = null;
@@ -182,7 +182,7 @@ function findProset(cards, previous) {
         setCards.push(cards[j]);
       }
     }
-    if (isProset(setCards)) {
+    if (isPowerSet(setCards)) {
       print ('found ', i);
       if (previous == null || listGT(set, previous)) {
         if (best == null || listGT(best, set)) {
@@ -192,18 +192,18 @@ function findProset(cards, previous) {
     }
   }
   if (best == null && previous != null) {
-    best = findProset(cards, null);
+    best = findPowerSet(cards, null);
   }
   return best;
 }
 
 powerset = {
   name: 'Power Set',
-  makeDeck: makeProSetDeck,
+  makeDeck: makePowerSetDeck,
   deal: deal,
-  isSet: isProset,
-  findSet: findProset,
-  findNextSet: findProset,
+  isSet: isPowerSet,
+  findSet: findPowerSet,
+  findNextSet: findPowerSet,
   tableSize: 7,
   tableIncrement: 1, // mathematically impossible to have no-set
 }
