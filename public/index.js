@@ -30,6 +30,8 @@ function showRestartBig(animationTime) {
 }
 
 function endGame() {
+  gameOver = true;
+
   var all = [];
   for (var i = 0; i < cards.length; i++) {
     all.push(i);
@@ -271,10 +273,19 @@ function checkAndClearSet() {
             }
           }
           makeCardDivs();
-          layoutCardDivs(); // TODO: animate the cards into the new layout
-
+          layoutCardDivs();
           rerender();
           saveGame();
+
+          var done = true;
+          for (var card of cards) {
+            if (card != null) {
+              done = false;
+            }
+          }
+          if (done) {
+            endGame();
+          }
         }, 800);
       }
     } else {
@@ -326,8 +337,7 @@ function help() {
       rerender();
       saveGame();
     } else { // game over
-      gameOver = true;
-      if (cards.length > 0) { // game over animation
+      if (!gameOver) {
         endGame();
       }
     }
