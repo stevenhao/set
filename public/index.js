@@ -263,7 +263,7 @@ function checkAndClearSet() {
           saveGame();
         }, defaultAnimationTime);
       } else {
-        fadeOutCards(selectedCards, 800);
+        fadeOutCards(selectedCards, defaultAnimationTime);
         setTimeout(function() {
           for (var i of selectedCards) {
             if (deck.length > 0) {
@@ -286,7 +286,7 @@ function checkAndClearSet() {
           if (done) {
             endGame();
           }
-        }, 800);
+        }, defaultAnimationTime);
       }
     } else {
       fadeOutCards(selectedCards, defaultAnimationTime);
@@ -302,7 +302,7 @@ function checkAndClearSet() {
         layoutCardDivs();// TODO: animate the cards into the new layout
         rerender();
         saveGame();
-      }, 800);
+      }, defaultAnimationTime);
     }
     $('.selected').removeClass('selected');
     resetHolds();
