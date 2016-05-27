@@ -108,44 +108,6 @@ function naiveSetFinder(setSize, isSet) {
   return findSet;
 }
 
-set = {
-  name: 'Set',
-  makeDeck: makeStandardDeck,
-  deal: deal,
-  isSet: isStandardSet,
-  findSet: naiveSetFinder(3, isStandardSet),
-  findNextSet: naiveSetFinder(3, isStandardSet),
-  tableSize: 12,
-  tableIncrement: 3,
-}
-
-superset = {
-  name: 'Super Set',
-  makeDeck: makeStandardDeck,
-  deal: deal,
-  isSet: isSuperSet,
-
-  findSet: naiveSetFinder(4, isSuperSet),
-  findNextSet: naiveSetFinder(4, isSuperSet),
-  tableSize: 9,
-  tableIncrement: 2,
-}
-
-hiddenset = {
-  name: 'Set',
-  makeDeck: function() {
-    var ret = makeStandardDeck();
-    ret[0].hidden = true;
-    return ret;
-  },
-  deal: deal,
-  isSet: isStandardSet,
-  findSet: naiveSetFinder(3, isStandardSet),
-  findNextSet: naiveSetFinder(3, isStandardSet),
-  tableSize: 12,
-  tableIncrement: 3,
-}
-
 function makePowerSetDeck() {
   var deck = [];
   for (var i = 1; i < 64; ++i) {
@@ -196,6 +158,50 @@ function findPowerSet(cards, previous) {
   return best;
 }
 
+set = {
+  name: 'Set',
+  makeDeck: makeStandardDeck,
+  deal: deal,
+  isSet: isStandardSet,
+  findSet: naiveSetFinder(3, isStandardSet),
+  findNextSet: naiveSetFinder(3, isStandardSet),
+  tableSize: 12,
+  tableIncrement: 3,
+  hasFastMode: true,
+  hasAutoComplete: true
+}
+
+hiddenset = {
+  name: 'Hidden Set',
+  makeDeck: function() {
+    var ret = makeStandardDeck();
+    ret[0].hidden = true;
+    return ret;
+  },
+  deal: deal,
+  isSet: isStandardSet,
+  findSet: naiveSetFinder(3, isStandardSet),
+  findNextSet: naiveSetFinder(3, isStandardSet),
+  tableSize: 12,
+  tableIncrement: 3,
+  hasFastMode: true,
+  hasAutoComplete: true
+}
+
+superset = {
+  name: 'Super Set',
+  makeDeck: makeStandardDeck,
+  deal: deal,
+  isSet: isSuperSet,
+
+  findSet: naiveSetFinder(4, isSuperSet),
+  findNextSet: naiveSetFinder(4, isSuperSet),
+  tableSize: 9,
+  tableIncrement: 2,
+  hasFastMode: false,
+  hasAutoComplete: false
+}
+
 powerset = {
   name: 'Power Set',
   makeDeck: makePowerSetDeck,
@@ -205,6 +211,8 @@ powerset = {
   findNextSet: findPowerSet,
   tableSize: 7,
   tableIncrement: 1, // mathematically impossible to have no-set
+  hasFastMode: true,
+  hasAutoComplete: false
 }
 
 Variants = {

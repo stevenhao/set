@@ -134,17 +134,6 @@ function newGame() {
   }
 }
 
-function setColorScheme(colorScheme) {
-  if (colorScheme == 'light') {
-    $body.addClass('light').removeClass('dark');
-  } else if (colorScheme == 'dark') {
-    $body.addClass('dark').removeClass('light');
-  }
-  if (typeof(Storage) !== 'undefined') {
-    localStorage.setItem('colorscheme', colorScheme);
-  }
-}
-
 function loadGame() {
   var gameid = currentVariant.name;
   if (typeof(Storage) !== 'undefined' && localStorage.getItem(gameid) != null) {
@@ -185,11 +174,48 @@ function start() {
   }
 }
 
+function setColorScheme(colorScheme) {
+  if (colorScheme == 'light') {
+    $body.addClass('light').removeClass('dark');
+  } else if (colorScheme == 'dark') {
+    $body.addClass('dark').removeClass('light');
+  }
+  if (typeof(Storage) !== 'undefined') {
+    localStorage.setItem('colorscheme', colorScheme);
+  }
+}
+
 function lightDark() {
   if ($body.hasClass('light')) {
     setColorScheme('dark');
   } else {
     setColorScheme('light');
+  }
+}
+
+function toggleFastMode() {
+  if (fastMode) {
+    fastMode = false;
+  } else {
+    fastMode = true;
+  }
+
+  print ('setting fast mode ' + fastMode);
+  if (typeof(Storage) !== 'undefined') {
+    localStorage.setItem('fastMode', fastMode);
+  }
+}
+
+function toggleAutoComplete() {
+  if (autoComplete) {
+    autoComplete = false;
+  } else {
+    autoComplete = true;
+  }
+
+  print ('setting auto complete ' + autoComplete);
+  if (typeof(Storage) !== 'undefined') {
+    localStorage.setItem('autoComplete', autoComplete);
   }
 }
 
@@ -389,7 +415,7 @@ function release() {
     holdCount -= 1;
   }
 
-  if (holdCount == 0 && fastMode) {
+  if (holdCount == 0 && currentVariant.hasFastMode && fastMode) {
     checkAndClearSet();
   }
 }
@@ -405,7 +431,7 @@ function toggleCard($card) {
     }
 
     $card.toggleClass('selected');
-    if ($card.hasClass('selected') && autoComplete) {
+    if ($card.hasClass('selected') && currentVariant.hasAutoComplete && autoComplete) {
       assistSet(); // only assist when autoComplete & selecting new
     }
   }
@@ -457,6 +483,10 @@ $body.on('keydown', function(evt) {
     help();
   } else if (evt.shiftKey && code == 'KeyF') {
     toggleFullScreen();
+  } else if (evt.shiftKey && code == 'KeyJ') {
+    toggleFastMode();
+  } else if (evt.shiftKey && code == 'KeyK') {
+    toggleAutoComplete();
   } else if (codes.indexOf(code) != -1) {
     if (!evt.shiftKey && !evt.ctrlKey && !evt.altKey) {
       var i = codes.indexOf(code);
@@ -490,5 +520,19 @@ if (typeof(Storage) !== 'undefined') {
   var colorscheme = localStorage.getItem('colorscheme');
   if (colorscheme != null) {
     setColorScheme(colorscheme);
+  }
+
+  var fastMode = localStorage.getItem('fastMode');
+  if (fastMode == null || fastMode === 'true') {
+    this.fastMode = true;
+  } else {
+    this.fastMode = false;
+  }
+
+  var autoComplete = localStorage.getItem('autoComplete');
+  if (autoComplete == null || autoComplete === 'true') {
+    this.autoComplete = true;
+  } else {
+    this.autoComplete = false;
   }
 }
