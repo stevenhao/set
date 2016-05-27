@@ -58,14 +58,17 @@
   <script src="draw.js"></script>
   <script src="layout.js"></script>
   <script src="variants.js"></script>
-  <script src="index.js"></script>
-  <script>
-    defaultAnimationTime = 400;
-    currentVariant = Variants.powerset;
-    fastMode = true;
-    autoComplete = false;
-    start();
-  </script>
+  <script type="text/coffeescript" src="index.coffee"></script>
+
+  <script type="text/coffeescript">
+    root = exports ? this
+    $ ->
+      root.variant = Variants.powerset
+      root.Settings.autoComplete = false
+      root.Controller.start()
+   </script>
+  <script type="text/javascript" src="coffee-script.js"></script>
+
 </body>
 
 </html>

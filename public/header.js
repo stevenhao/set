@@ -1,4 +1,29 @@
 print = console.log.bind(console);
+
+function nop() {}
+
+function range(x) {
+  var ret = [];
+  for(var i = 0; i < x; ++i) {
+    ret.push(i);
+  }
+  return ret;
+}
+
+function rrange(x) {
+  var ret = [];
+  for(var i = 0; i < x; ++i) {
+    ret.push(x-1-i);
+  }
+  return ret;
+}
+
+Array.prototype.delete = function(x) {
+  if (this.indexOf(x) != -1) {
+    this.splice(this.indexOf(x), 1);
+  }
+}
+
 function pad2(x) {
   x = "" + x;
   while (x.length < 2) {
