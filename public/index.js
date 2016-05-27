@@ -362,7 +362,7 @@ function assistSet() {
 
 // fast mode
 var holdCount = 0;
-var defaultHoldTime = 1000;
+var defaultHoldTime = 10000;
 var holdUntil = 0;
 var holdState = false; // true if deselecting
 
@@ -390,6 +390,7 @@ function release() {
   }
 
   if (holdCount == 0 && fastMode) {
+    holdState = null;
     checkAndClearSet();
   }
 }
@@ -397,7 +398,7 @@ function release() {
 function toggleCard($card) {
   if (!isAnimating()) {
     var state = $card.hasClass('selected');
-    if (holdCount == 0) {
+    if (holdState == null) {
       holdState = state;
     }
     if (holdCount > 0 && holdState != state) {
@@ -413,20 +414,13 @@ function toggleCard($card) {
 
 var clickStart = ('ontouchstart' in window) ? 'touchstart' : 'mousedown';
 var clickEnd = ('ontouchstart' in window) ? 'touchend' : 'mouseup';
-var dragLeave = 'dragleave';
 
 function registerCardHandlers($card) {
   $card.on(clickStart, function(e) {
     e.preventDefault();
     toggleCard($(this));
-    hold();
-    return false;
   });
 
-  $card.on(clickEnd, function(e) {
-    release();
-    return false;
-  });
 }
 
 $('#light-dark').on(clickStart, lightDark);
@@ -481,9 +475,34 @@ $body.on('keyup ', function(evt) {
   }
 });
 
-$body.on(clickStart, function(e) {
+$body.on(clickEnd, function(e) {
+  print('release');
+  release();
   return false;
 });
+$body.on(clickStart, function(e) {
+  print('hold');
+  hold();
+  return false;
+});
+$body.on('touchmove', function(e) {
+  var x = e.originalEvent.targetTouches[0].pageX, y = e.originalEvent.targetTouches[0].pageY;
+  for (var i = 0; i < cards.length; ++i) {
+    var $el = getCardEl(i);
+    var w = $el.width(), h = $el.height();
+    var rect = $el[0].getBoundingClientRect();
+    var cy = (rect.top + rect.bottom) / 2, cx = (rect.left + rect.right) / 2;
+    function sq(x) { return x * x;}
+    var dst = Math.sqrt(sq(x - cx) + sq(y - cy));
+    if (dst < Math.min(w, h) * .8) {
+      toggleCard($el);
+    }
+  }
+  if (holdUntil < Date.now() + 1000) {
+    holdUntil = Math.max(holdUntil, Date.now() + defaultHoldTime);
+    setTimeout(clearHolds, holdUntil - Date.now() + 10);
+  }
+})
 
 
 if (typeof(Storage) !== 'undefined') {
