@@ -347,15 +347,15 @@ function help() {
 
 function assistSet() {
   var set = getSelectedCards();
-  if (set.length == 2 && fastMode) {
-    for (var i = 0; i < cards.length; ++i) {
-      var tmp = [set[0], set[1], i];
-      if (isSet(tmp)) {
-        set.push(i);
-        getCardEl(i).addClass('selected'); // do i really need this
-        return true;
-      }
+  var tmp = set.slice();
+  for (var i = 0; i < cards.length; ++i) {
+    tmp.push(i);
+    if (isSet(tmp)) {
+      set.push(i); // do i really need this
+      getCardEl(i).addClass('selected'); 
+      return true;
     }
+    tmp.pop();
   }
   return;
 }
@@ -405,8 +405,11 @@ function toggleCard($card) {
     }
 
     $card.toggleClass('selected');
-    if ($card.hasClass('selected') && fastMode) {
-      assistSet(); // only assist when fastmode
+    if ($card.hasClass('selected') && autoComplete) {
+      assistSet(); // only assist when autoComplete & selecting new
+    }
+    if (fastMode) { // do this after first step
+      checkAndClearSet(); // clear sets any time things change
     }
   }
 }
