@@ -131,11 +131,10 @@ superset = {
   tableIncrement: 2,
 }
 
-setLastCardHidden = {
+hiddenset = {
   name: 'Set',
   makeDeck: function() {
     var ret = makeStandardDeck();
-    // ret[ret.length - 1].hidden = true;
     ret[0].hidden = true;
     return ret;
   },
@@ -211,6 +210,6 @@ powerset = {
 Variants = {
   set: set,
   superset: superset,
-  hidelast: setLastCardHidden,
+  hiddenset: hiddenset,
   powerset: powerset
 }
