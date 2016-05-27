@@ -389,7 +389,7 @@ function release() {
     holdCount -= 1;
   }
 
-  if (holdCount == 0 && holdState == false && fastMode) {
+  if (holdCount == 0 && fastMode) {
     checkAndClearSet();
   }
 }
@@ -407,9 +407,6 @@ function toggleCard($card) {
     $card.toggleClass('selected');
     if ($card.hasClass('selected') && autoComplete) {
       assistSet(); // only assist when autoComplete & selecting new
-    }
-    if (fastMode) { // do this after first step
-      checkAndClearSet(); // clear sets any time things change
     }
   }
 }
