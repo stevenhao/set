@@ -5,6 +5,9 @@ var $restartBig = $('#restartBig')
 var $restart = $('#restart')
 var $noSet = $('#no-set');
 var $checkSet = $('#check-set');
+var $settings = $('#settings');
+var $close = $('#settings-x');
+var $settingspage = $('#settings-page');
 var gameOver = false;
 
 function getClockTime() {
@@ -465,6 +468,8 @@ $restartBig.on(clickStart, restart);
 $checkSet.on(clickStart, checkAndClearSet);
 
 $noSet.on(clickStart, help);
+$settings.on(clickStart, function() {$settingspage[0].style.display = "block";});
+$close.on(clickStart, function() {$settingspage[0].style.display = "none";});
 
 $body.on('keydown', function(evt) {
   if (evt.originalEvent.repeat) {
