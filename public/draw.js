@@ -57,7 +57,7 @@ function makeProsetCard(card) {
   return svgElem;
 }
 
-function makeCard(card) {
+function makeSVG(card) {
   if (card.type == '3^4') {
     return makeStandardCard(card);
   } else if (card.type == '2^6') {
