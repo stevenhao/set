@@ -84,8 +84,7 @@ root.Controller = do ->
       keyboard = ['KeyQ','KeyA','KeyZ','KeyW','KeyS','KeyX','KeyE','KeyD','KeyC','KeyR','KeyF','KeyV','KeyT','KeyG','KeyB','KeyY','KeyH','KeyN','KeyU','KeyJ','KeyM']
       if 0 <= keyboard.indexOf(keyCode) < Model.getCardsLength()
         hitCard(keyboard.indexOf(keyCode))
-
-    pressedKeys[keyCode] = {expire: Date.now() + Settings.keyboardTimeout}
+        pressedKeys[keyCode] = {expire: Date.now() + Settings.keyboardTimeout}
 
   releaseKey = (keyCode) ->
     if pressedKeys[keyCode]?
@@ -140,13 +139,28 @@ root.View = do ->
   $checkSet = $('#check-set')
   $toggleTheme = $('#light-dark')
 
+  ## decorate functions to wait until animation completes
+  ## (@w fn)(...) behaves like fn(...)
+  waitUntil = Date.now()
+  lockFor = (time) ->
+    time += Date.now()
+    if time > waitUntil
+      waitUntil = time
+
+  @w = (fn) ->
+    ->
+      if Date.now() > waitUntil
+        fn.apply(this, arguments)
+      else
+        print 'locked for animation'
+
   ## Event listeners
   do registerListeners = ->
     $toggleTheme.on('click', Controller.toggleTheme)
-    $restart.on('click', Controller.restart)
-    $restartBig.on('click', Controller.restart)
-    $checkSet.on('click', Controller.checkSet)
-    $noSet.on('click', Controller.noSet)
+    $restart.on('click', @w Controller.restart)
+    $restartBig.on('click', @w Controller.restart)
+    $checkSet.on('click', @w Controller.checkSet)
+    $noSet.on('click', @w Controller.noSet)
 
     $window.on 'orientationchange resize', ->
       layoutCards()
@@ -154,7 +168,8 @@ root.View = do ->
       $body.css('display', 'block')
 
     ## Gesture input listeners
-    $body.on 'keydown', (evt) ->
+    $body.on 'keydown', @w (evt) ->
+      print 'this', this, 'evt', evt
       if evt.originalEvent.metaKey
         return true
       else
@@ -162,7 +177,7 @@ root.View = do ->
         Controller.pressKey(evt.originalEvent.code, evt.shiftKey, evt.originalEvent.repeat)
         return false
 
-    hitXY = (x, y, hitBox) ->
+    hitXY = @w (x, y, hitBox) ->
       $cards.forEach ($card, i) ->
         rect = $card[0].getBoundingClientRect()
         [cx, cy] = [(rect.left + rect.right) / 2, (rect.top + rect.bottom) / 2]
@@ -269,6 +284,8 @@ root.View = do ->
       setTimeout ->
         $card.empty()
       , time
+    print 'replaceCard', time
+    lockFor(time)
 
   addCards = (newCardModels) ->
     # TODO: animate the transition
@@ -313,18 +330,23 @@ root.View = do ->
     $clock.fadeOut(1100)
 
   gameOver = (timeString) ->
+    print 'game over.'
+    lockFor(3500)
     rrange($cards.length).forEach (i) ->
       replaceCard(i, null, 1000)
     setTimeout ->
       showClock(timeString, 2000)
     , 500
     setTimeout ->
-      $restartBig.fadeIn(3000)
+      $restartBig.fadeIn(2000)
     , 1500
 
   gameOverDone = ->
+    lockFor(800)
     $restartBig.fadeOut(400)
-    rewindClock(700)
+    setTimeout ->
+      rewindClock(700)
+    , 100
 
   clear = ->
     $cards.forEach ($card) -> $card.remove()
@@ -376,7 +398,7 @@ root.Model = do ->
   restart = ->
     if phase == 'gameover'
       View.gameOverDone()
-      setTimeout(newGame, 2000)
+      setTimeout(newGame, 1000)
     else
       newGame()
 
@@ -395,6 +417,9 @@ root.Model = do ->
         View.addCards(cards)
         View.layoutCards()
         View.setLabels(phase)
+        print 'phase', phase
+        if phase == 'gameover'
+          View.gameOver(getClockTime())
         return true
     return false
 
@@ -429,6 +454,10 @@ root.Model = do ->
       else
         cards.delete(cards[i])
         View.deleteCard(i)
+    if (cards.every (c) -> !(c?))
+      phase = 'gameover'
+      View.setLabels(phase)
+      View.gameOver(getClockTime())
 
   noSet = ->
     cur = selected.slice()
