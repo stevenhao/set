@@ -156,16 +156,14 @@ root.View = do ->
 
   ## Event listeners
   do registerListeners = ->
-    $toggleTheme.on('click', Controller.toggleTheme)
-    $restart.on('click', @w Controller.restart)
-    $restartBig.on('click', @w Controller.restart)
-    $checkSet.on('click', @w Controller.checkSet)
-    $noSet.on('click', @w Controller.noSet)
+    $toggleTheme.on('click touchend', Controller.toggleTheme)
+    $restart.on('click touchend', @w Controller.restart)
+    $restartBig.on('click touchend', @w Controller.restart)
+    $checkSet.on('click touchend', @w Controller.checkSet)
+    $noSet.on('click touchend', @w Controller.noSet)
 
     $window.on 'orientationchange resize', ->
       layoutCards()
-      $body.css('display', 'table').height()
-      $body.css('display', 'block')
 
     ## Gesture input listeners
     $body.on 'keydown', @w (evt) ->
@@ -191,7 +189,11 @@ root.View = do ->
         hitXY(evt.clientX, evt.clientY, 1)
 
     $body.on 'touchstart', (evt) ->
-      evt.originalEvent.changedTouches.forEach (touch) ->
+      evt.preventDefault()
+      touchList = evt.originalEvent.changedTouches
+      range(touchList.length).map(
+        (i) -> touchList.item(i)
+      ).forEach (touch) ->
         hitXY(touch.pageX, touch.pageY, 1)
 
     $body.on 'mousemove', (evt) ->
@@ -199,7 +201,11 @@ root.View = do ->
         hitXY(evt.clientX, evt.clientY, .9)
 
     $body.on 'touchmove', (evt) ->
-      evt.originalEvent.changedTouches.forEach (touch) ->
+      evt.preventDefault()
+      touchList = evt.originalEvent.changedTouches
+      range(touchList.length).map(
+        (i) -> touchList.item(i)
+      ).forEach (touch) ->
         hitXY(touch.pageX, touch.pageY, .9)
 
     ## End-of-gesture listeners
@@ -210,7 +216,8 @@ root.View = do ->
       Controller.releaseMouse()
 
     $body.on 'touchend', (evt) ->
-      Controller.releaseMouse()
+      if evt.originalEvent.touches.length == 0
+        Controller.releaseMouse()
 
   ## DOM
   setLabels = (phase) ->
@@ -247,6 +254,8 @@ root.View = do ->
             width: w
             height: h
           }
+    $body.css('display', 'table').height()
+    $body.css('display', 'block') # force redraw
 
   addCard = (cardModel) ->
     $card = $('<div>').addClass('card')
