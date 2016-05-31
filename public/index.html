@@ -57,14 +57,27 @@
   <script src="header.js"></script>
   <script src="draw.js"></script>
   <script src="variants.js"></script>
-  <script type="text/coffeescript" src="index.coffee"></script>
+  <script type="text/coffeescript" src="controller.coffee"></script>
+  <script type="text/coffeescript" src="view.coffee"></script>
+  <script type="text/coffeescript" src="model.coffee"></script>
 
   <script type="text/coffeescript">
     root = exports ? this
     $ ->
+
+      root.Settings = {
+        fastMode: true
+        autoComplete: true
+        theme: 'dark'
+        gestureTimeout: 1000
+        keyboardTimeout: 2000
+        animationTime: 400
+      }
+
+      root.variant = Variants.set
       root.Controller.start()
    </script>
-  <script type="text/javascript" src="coffee-script.js"></script>
+   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.1.2/coffee-script.min.js"></script>
 </body>
 
 </html>

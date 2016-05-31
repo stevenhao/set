@@ -1,14 +1,4 @@
-
-root.Settings = {
-  fastMode: true
-  autoComplete: true
-  theme: 'dark'
-  gestureTimeout: 1000
-  keyboardTimeout: 2000
-  animationTime: 400
-}
-
-root.variant = Variants.set
+root = exports ? this
 
 root.Model = do ->
   gameOver = null
