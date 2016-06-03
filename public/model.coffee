@@ -6,11 +6,12 @@ root.Model = do ->
   cards = null
   selected = null
   startTime = null
+  endTime = null
   phase = null
 
   getClockTime = ->
-    diff = new Date(Date.now() - startTime)
-    pad2(diff.getMinutes())+':'+pad2(diff.getSeconds())
+    seconds = Math.floor((endTime - startTime) / 1000)
+    return pad2(Math.floor(seconds / 60)) + ':' + pad2(seconds % 60)
 
   deselectAll = -> selected.slice().forEach(deselect)
 
@@ -49,6 +50,7 @@ root.Model = do ->
         View.layoutCards()
         View.setLabels(phase)
         if phase == 'gameover'
+          endTime = game.endTime
           View.gameOver(getClockTime())
         return true
     return false
@@ -57,8 +59,9 @@ root.Model = do ->
     gameid = variant.name
     if typeof(Storage) isnt 'undefined'
       gameString = JSON.stringify {
-        cards: cards, deck: deck, startTime: startTime, phase: phase
-        selected: [] # do we want to preserve selected cards?
+        cards: cards, deck: deck, startTime: startTime, phase: phase,
+        selected: [], # do we want to preserve selected cards?
+        endTime: endTime, # may be null
       }
       localStorage.setItem(gameid, gameString)
 
@@ -86,6 +89,7 @@ root.Model = do ->
         View.deleteCard(i)
     if (cards.every (c) -> !(c?))
       phase = 'gameover'
+      endTime = Date.now()
       View.setLabels(phase)
       View.gameOver(getClockTime())
 
@@ -108,6 +112,7 @@ root.Model = do ->
         View.addCards(newCards)
       else if phase == 'endgame' # game over
         phase = 'gameover'
+        endTime = Date.now()
         View.setLabels(phase)
         View.gameOver(getClockTime())
     else # highlight the set
