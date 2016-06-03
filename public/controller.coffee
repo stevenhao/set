@@ -12,10 +12,11 @@ root.Controller = do ->
   noSet = -> 
     Model.noSet()
     Model.saveGame()
+  hint = ->
+    Model.hint()
   restart = -> 
     Model.restart()
     # do not save game until we actually do something nontrivial
-
   ##  Gesture controller
   currentGesture = null
 
@@ -69,6 +70,8 @@ root.Controller = do ->
       else if keyCode == 'KeyX'
         noSet()
         checkSet()
+      else if keyCode == 'KeyH'
+        hint()
     else
       keyboard = ['KeyQ','KeyA','KeyZ','KeyW','KeyS','KeyX','KeyE','KeyD','KeyC','KeyR','KeyF','KeyV','KeyT','KeyG','KeyB','KeyY','KeyH','KeyN','KeyU','KeyJ','KeyM']
       if 0 <= keyboard.indexOf(keyCode) < Model.getCardsLength()

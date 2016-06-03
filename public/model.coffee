@@ -115,6 +115,19 @@ root.Model = do ->
       deselectAll()
       cur.forEach(select)
 
+  hint = ->
+    target = variant.findSet(cards)
+    if target == null
+      noSet()
+    else
+      if not (selected.every (i) -> i in target)
+        deselectAll()
+      newTarget = (target.filter (i) -> i not in selected)
+      if newTarget.length > 0
+        select(newTarget[0])
+      else # selected cards form a set already
+        #do nothing
+
   assistSet = ->
     for i in range(cards.length)
       if i not in selected
@@ -140,6 +153,7 @@ root.Model = do ->
     checkSet: checkSet
     clearSet: clearSet
     noSet: noSet
+    hint: hint
     assistSet: assistSet
     select: select
     deselect: deselect
