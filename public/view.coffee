@@ -41,7 +41,6 @@ root.View = do ->
 
     ## Gesture input listeners
     $body.on 'keydown', @w (evt) ->
-      print 'this', this, 'evt', evt
       if evt.originalEvent.metaKey
         return true
       else
@@ -167,7 +166,6 @@ root.View = do ->
       setTimeout ->
         $card.empty()
       , time
-    print 'replaceCard', time
     lockFor(time)
 
   addCards = (newCardModels) ->
@@ -213,7 +211,6 @@ root.View = do ->
     $clock.fadeOut(1100)
 
   gameOver = (timeString) ->
-    print 'game over.'
     lockFor(3500)
     rrange($cards.length).forEach (i) ->
       replaceCard(i, null, 1000)

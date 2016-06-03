@@ -48,7 +48,6 @@ root.Model = do ->
         View.addCards(cards)
         View.layoutCards()
         View.setLabels(phase)
-        print 'phase', phase
         if phase == 'gameover'
           View.gameOver(getClockTime())
         return true
