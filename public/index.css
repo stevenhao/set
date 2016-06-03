@@ -167,10 +167,6 @@ svg .stripe.purple {
 .dark {
   background-color:black;
 }
-.circle {
-  stroke-width: 0;
-  r: 11.7;
-}
 .dark .green {
   stroke: cyan;
   fill: cyan;

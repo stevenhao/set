@@ -35,7 +35,7 @@ function makeStandardCard(card) {
   return svgElem;
 }
 
-function makeProsetCard(card) {
+function makePowersetCard(card) {
   var svgElem = $$('svg');
   svgElem.addClass("card-svg").attr("viewbox", "0 0 200 100");
 
@@ -49,7 +49,7 @@ function makeProsetCard(card) {
       if (card.value & (1 << i)) {
         var cx = 50 * (1 + (i % 3));
         var cy = 33 * (Math.floor(i / 3) + 1);
-        var circ = $$('circle').attr('cx', cx).attr('cy', cy).addClass(colors[i]).addClass('shape').addClass('circle');
+        var circ = $$('circle').attr('cx', cx).attr('cy', cy).attr('r', 11).attr('stroke-width', 0).addClass(colors[i]).addClass('shape').addClass('circle');
         circ.appendTo(svgElem);
       }
     }
@@ -61,6 +61,6 @@ function makeSVG(card) {
   if (card.type == '3^4') {
     return makeStandardCard(card);
   } else if (card.type == '2^6') {
-    return makeProsetCard(card);
+    return makePowersetCard(card);
   }
 }
