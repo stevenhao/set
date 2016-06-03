@@ -184,12 +184,20 @@ svg .stripe.purple {
   fill: #9546CC;
 }
 .dark .yellow {
-  stroke: orange;
-  fill: orange;
+  stroke: #B02020;
+  fill: #B02020;
 }
 .dark .orange {
   stroke: #49BF3D;
   fill: #49BF3D;
+}
+.dark .brown {
+  stroke: #E09870;
+  fill: #E09870;
+}
+.dark .silver {
+  stroke: #C0C0C0;
+  fill: #C0C0C0;
 }
 .dark .open {
   fill: none;

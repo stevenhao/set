@@ -165,3 +165,4 @@ root.Model = do ->
     getCardsLength: -> cards.length
     isCardSelected: (i) -> i in selected
   }
+

@@ -50,7 +50,11 @@
         </div>
       </div>
     </div>
-    <div id="light-dark" class="btn small" style="position:absolute;top:0%;left:0%"></div>
+    <div style="position:absolute;top:0%;left:0%">
+      <div id="light-dark" class="btn small"></div>
+      <span id="minus" class="btn small">-</span>
+      <span id="plus" class="btn small">+</span>
+    </div>
     <div id="restart" class="btn small" style="position:absolute;top:0%;right:0%">Restart</div>
   </div>
 
@@ -64,7 +68,6 @@
   <script type="text/coffeescript">
     root = exports ? this
     $ ->
-
       root.Settings = {
         fastMode: true
         autoComplete: false
@@ -73,9 +76,19 @@
         keyboardTimeout: 2000
         animationTime: 400
       }
-
-      root.variant = Variants.powerset
-      root.Controller.start()
+      currentDimensions = 6
+      allowedDimensions = [3,4,5,6,7,8]
+      setDimension = (cnt) ->
+        if not View.isAnimating()
+          if cnt in allowedDimensions
+            currentDimensions = cnt
+            root.variant = Variants.powersetWithDimension(currentDimensions)
+            root.Controller.start()
+      setDimension(6)
+      $('#minus').on 'click touchend', ->
+        setDimension(currentDimensions - 1)
+      $('#plus').on 'click touchend', ->
+        setDimension(currentDimensions + 1)
    </script>
 
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.1.2/coffee-script.min.js"></script>

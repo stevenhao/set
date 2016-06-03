@@ -146,14 +146,6 @@ hiddenset = {
   tableIncrement: 3,
 }
 
-function makePowerSetDeck() {
-  var deck = [];
-  for (var i = 1; i < 64; ++i) {
-    deck.push({type: '2^6', value: i});
-  }
-  return shuffle(deck);
-}
-
 function isPowerSet(set) {
   if (isNotNull(set)) {
     if (set.length > 0) {
@@ -196,20 +188,29 @@ function findPowerSet(cards, previous) {
   return best;
 }
 
-powerset = {
-  name: 'Power Set',
-  makeDeck: makePowerSetDeck,
-  deal: deal,
-  isSet: isPowerSet,
-  findSet: findPowerSet,
-  findNextSet: findPowerSet,
-  tableSize: 7,
-  tableIncrement: 1, // mathematically impossible to have no-set
+function powersetWithDimension(dim) {
+  return {
+    name: 'Power Set ' + dim,
+    makeDeck: function() {
+      var deck = [];
+      for (var i = 1; i < (1 << dim); ++i) {
+        deck.push({type: '2^' + dim, value: i});
+      }
+      return shuffle(deck);
+    },
+    deal: deal,
+    isSet: isPowerSet,
+    findSet: findPowerSet,
+    findNextSet: findPowerSet,
+    tableSize: dim + 1,
+    tableIncrement: 1, // mathematically impossible to have no-set
+  }
 }
 
 Variants = {
   set: set,
   superset: superset,
   hiddenset: hiddenset,
-  powerset: powerset
+  powerset: powersetWithDimension(6),
+  powersetWithDimension: powersetWithDimension,
 }

@@ -247,4 +247,6 @@ root.View = do ->
     replaceCard: replaceCard
     addCards: addCards
     deleteCard: deleteCard
+
+    isAnimating: -> Date.now() <= waitUntil
   }
