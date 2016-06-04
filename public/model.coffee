@@ -39,7 +39,8 @@ root.Model = do ->
     print 'loading', gameid
     if typeof(Storage) isnt 'undefined' and localStorage.getItem(gameid)?
       game = JSON.parse(localStorage.getItem(gameid))
-      if game?
+      if (game? and game.cards? and game.deck? and game.startTime? and game.selected?
+        and game.phase?)
         cards = game.cards
         deck = game.deck
         startTime = game.startTime
@@ -50,8 +51,11 @@ root.Model = do ->
         View.layoutCards()
         View.setLabels(phase)
         if phase == 'gameover'
-          endTime = game.endTime
-          View.gameOver(getClockTime())
+          if game.endTime?           
+            endTime = game.endTime
+            View.gameOver(getClockTime())
+          else
+            return false
         return true
     return false
 
