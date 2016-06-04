@@ -45,16 +45,20 @@ root.Model = do ->
         startTime = game.startTime
         selected = game.selected
         phase = game.phase
+        if phase == 'gameover'
+          if true # do we show the most recent game?
+            return false
+          else # in the future, this should be a setting
+            if game.endTime?           
+              endTime = game.endTime
+              View.gameOver(getClockTime())
+            else
+              return false
+      else
         View.clear()
         View.addCards(cards)
         View.layoutCards()
         View.setLabels(phase)
-        if phase == 'gameover'
-          if game.endTime?           
-            endTime = game.endTime
-            View.gameOver(getClockTime())
-          else
-            return false
         return true
     return false
 
