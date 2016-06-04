@@ -39,8 +39,7 @@ root.Model = do ->
     print 'loading', gameid
     if typeof(Storage) isnt 'undefined' and localStorage.getItem(gameid)?
       game = JSON.parse(localStorage.getItem(gameid))
-      if (game? and game.cards? and game.deck? and game.startTime? and game.selected?
-        and game.phase?)
+      if (game? and game.cards? and game.deck? and game.startTime? and game.selected? and game.phase?)
         cards = game.cards
         deck = game.deck
         startTime = game.startTime

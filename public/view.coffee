@@ -9,7 +9,7 @@ root.View = do ->
   $restartBig = $('#restartBig')
   $restart = $('#restart')
   $noSet = $('#no-set')
-  $noSetText = $('#no-set-text')
+  $done = $('#done')
   $checkSet = $('#check-set')
   $toggleTheme = $('#light-dark')
 
@@ -35,6 +35,7 @@ root.View = do ->
     $restartBig.on('click touchend', @w Controller.restart)
     $checkSet.on('click touchend', @w Controller.checkSet)
     $noSet.on('click touchend', @w Controller.noSet)
+    $done.on('click touchend', @w Controller.noSet)
 
     $window.on 'orientationchange resize', ->
       layoutCards()
@@ -96,14 +97,16 @@ root.View = do ->
   setLabels = (phase) ->
     if phase == 'gameover'
       $noSet.fadeOut()
+      $done.fadeOut()
       $checkSet.fadeOut()
     else
-      $noSet.fadeIn()
       $checkSet.fadeIn()
       if phase == 'normal'
-        $noSetText.html('No Set')
+        $noSet.fadeIn()
+        $done.fadeOut()
       else if phase == 'endgame'
-        $noSetText.html('Done!')
+        $noSet.fadeOut()
+        $done.fadeIn()
     
   layoutCards = ->
     rows = 3
