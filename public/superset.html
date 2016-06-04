@@ -36,18 +36,19 @@
         Restart
       </div>
     </div>
-    <div id="check-set" class="btn large" style="position:absolute;width:100%;height:20%;bottom:0%;left:0%">
-      <div style="position:relative; height:100%; width:100%">
-        <div id="check-set-text" style="position:absolute; top:30%;left:50%; transform: translate(-50%, -50%)">
-          Check Set
-        </div>
+    <div id="check-set" class="btn medium" style="position:absolute;width:100%;height:20%;bottom:0%;left:0%">
+      <div id="check-set-text" style="position:absolute; top:30%;left:50%; transform: translate(-50%, -50%)">
+        Check Set
       </div>
     </div>
-    <div id="no-set" class="btn large" style="position:absolute;min-width:30%;height:15%;top:0%;left:35%">
-      <div style="position:relative; height:100%; width:100%">
-        <div id="no-set-text" style="position:absolute; top:30%;left:50%; transform: translate(-50%, -50%)">
-          No Set
-        </div>
+    <div id="no-set" class="btn medium" style="position:absolute;min-width:30%;height:15%;top:0%;left:35%" hidden>
+      <div style="position:absolute; top:30%;left:50%; transform: translate(-50%, -50%)">
+        No Set
+      </div>
+    </div>
+    <div id="done" class="btn large" style="position:absolute;min-width:30%;height:15%;top:0%;left:35%" hidden>
+      <div style="position:absolute; top:30%;left:50%; transform: translate(-50%, -50%)">
+        Done?
       </div>
     </div>
     <div id="light-dark" class="btn small" style="position:absolute;top:0%;left:0%"></div>
@@ -57,8 +58,6 @@
   <script src="header.js"></script>
   <script src="draw.js"></script>
   <script src="variants.js"></script>
-  <script type="text/coffeescript" src="index.coffee"></script>
-
   <script type="text/coffeescript" src="controller.coffee"></script>
   <script type="text/coffeescript" src="view.coffee"></script>
   <script type="text/coffeescript" src="model.coffee"></script>
