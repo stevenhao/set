@@ -45,16 +45,13 @@ body {
     font-size: 300px;
   }
   .large {
-    font-size: 30px;
-    line-height:3.75;
+    font-size: 25px;
   }
   .medium {
     font-size: 15px;
-    line-height: 2.25;
   }
   .small {
     font-size: 12px;
-    line-height: 1.5;
   }
 }
 @media screen and (max-width : 1024px) /* Tablet */
@@ -63,14 +60,13 @@ body {
     font-size: 300px;
   }
   .large {
-    font-size: 45px;
-    line-height:3.75;
+    font-size: 25px;
   }
   .medium {
-    font-size: 22.5px;
+    font-size: 15px;
   }
   .small {
-    font-size: 18px;
+    font-size: 12px;
   }
 }
 @media screen and (max-width : 768px) /* Phone Landscape/Tablet Portrait */
@@ -79,14 +75,13 @@ body {
     font-size: 200px;
   }
   .large {
-    font-size: 30px;
-    line-height:3.75;
+    font-size: 18px;
   }
   .medium {
-    font-size: 15px;
+    font-size: 12px;
   }
   .small {
-    font-size: 12px;
+    font-size: 10px;
   }
 }
 @media screen and (max-width : 450px) /* Phone Portrait */
@@ -96,15 +91,12 @@ body {
   }
   .large {
     font-size: 15px;
-    line-height:3.75;
   }
   .medium {
     font-size: 11.5px;
-    line-height: 1;
   }
   .small {
     font-size: 9px;
-    line-height: 1.125;
   }
 }
 
