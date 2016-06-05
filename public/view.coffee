@@ -96,11 +96,15 @@ root.View = do ->
   ## DOM
   setLabels = (phase) ->
     if phase == 'gameover'
+      lockFor(400)
       $noSet.fadeOut()
       $done.fadeOut()
       $checkSet.fadeOut()
     else
+      lockFor(400)
       $checkSet.fadeIn()
+      $clock.fadeOut()
+      $restartBig.fadeOut()
       if phase == 'normal'
         $noSet.fadeIn()
         $done.fadeOut()
