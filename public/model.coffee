@@ -54,12 +54,12 @@ root.Model = do ->
               View.gameOver(getClockTime())
             else
               return false
-      else
-        View.clear()
-        View.addCards(cards)
-        View.layoutCards()
-        View.setLabels(phase)
-        return true
+        else
+          View.clear()
+          View.addCards(cards)
+          View.layoutCards()
+          View.setLabels(phase)
+          return true
     return false
 
   saveGame = ->
