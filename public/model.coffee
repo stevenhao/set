@@ -23,7 +23,7 @@ root.Model = do ->
     phase = 'normal'
 
     View.clear()
-    View.addCards(cards)
+    View.addCardsFancy(cards)
     View.layoutCards()
     View.setLabels(phase)
 

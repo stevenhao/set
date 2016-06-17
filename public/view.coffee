@@ -137,14 +137,19 @@ root.View = do ->
     $body.css('display', 'table').height()
     $body.css('display', 'block') # force redraw
 
-  addCard = (cardModel) ->
+
+  addCardFancy = (cardModel, delay) ->
     $card = $('<div>').addClass('card')
     if cardModel?
       makeSVG(cardModel).appendTo($card)
     $card.appendTo($display)
     $card.css({'display': 'none'})
-    $card.fadeIn(Settings.animationTime)
+    $card.fadeIn(Settings.animationTime + delay)
+    lockFor(Settings.animationTime + delay)
     $cards.push($card)
+
+  addCard = (cardModel) ->
+    addCardFancy(cardModel, 0)
 
   ## Animation
 
@@ -176,8 +181,12 @@ root.View = do ->
     lockFor(time)
 
   addCards = (newCardModels) ->
-    # TODO: animate the transition
     newCardModels.forEach (addCard)
+    layoutCards()
+
+  addCardsFancy = (newCardModels) ->
+    newCardModels.forEach (cardModel, idx) ->
+      addCardFancy(cardModel, idx * 200)
     layoutCards()
 
   deleteCard = (i) ->
@@ -253,6 +262,7 @@ root.View = do ->
     toggleFullScreen: toggleFullScreen
     replaceCard: replaceCard
     addCards: addCards
+    addCardsFancy: addCardsFancy
     deleteCard: deleteCard
 
     isAnimating: -> Date.now() <= waitUntil
