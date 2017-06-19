@@ -159,6 +159,14 @@ body {
   stroke: darkorange;
   fill: darkorange;
 }
+.dark .brown {
+  stroke: black;
+  fill: black;
+}
+.dark .silver {
+  stroke: #C0C0C0;
+  fill: #C0C0C0;
+}
 .light .open {
   fill: none;
 }
