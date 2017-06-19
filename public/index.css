@@ -159,11 +159,11 @@ body {
   stroke: darkorange;
   fill: darkorange;
 }
-.dark .brown {
+.light .brown {
   stroke: black;
   fill: black;
 }
-.dark .silver {
+.light .silver {
   stroke: #C0C0C0;
   fill: #C0C0C0;
 }
