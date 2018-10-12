@@ -12,6 +12,7 @@ root.View = do ->
   $done = $('#done')
   $checkSet = $('#check-set')
   $toggleTheme = $('#light-dark')
+  $toggleAutocomplete = $('#autocomplete')
 
   ## decorate functions to wait until animation completes
   ## (@w fn)(...) behaves like fn(...)
@@ -31,6 +32,7 @@ root.View = do ->
   ## Event listeners
   do registerListeners = ->
     $toggleTheme.on('click touchend', Controller.toggleTheme)
+    $toggleAutocomplete.on('click touchend', Controller.toggleAutocomplete)
     $restart.on('click touchend', @w Controller.restart)
     $restartBig.on('click touchend', @w Controller.restart)
     $checkSet.on('click touchend', @w Controller.checkSet)
@@ -260,6 +262,7 @@ root.View = do ->
 
     setTheme: (theme) -> $body.removeClass('light dark').addClass(theme)
     toggleFullScreen: toggleFullScreen
+    setAutocomplete: (autocomplete) -> $body.removeClass('autocomplete-on').addClass(if autocomplete then 'autocomplete-on' else '')
     replaceCard: replaceCard
     addCards: addCards
     addCardsFancy: addCardsFancy

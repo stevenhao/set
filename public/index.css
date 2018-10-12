@@ -100,12 +100,30 @@ body {
   }
 }
 
+.small {
+  padding-bottom: 0px;
+}
+
+#settings .btn {
+  text-align: left;
+}
+
 .light #light-dark:after {
   content: "Lights off";
 }
 .dark #light-dark:after {
   content: "Lights on";
 }
+
+#autocomplete:after {
+  content: "Autocomplete on";
+}
+
+.autocomplete-on #autocomplete:after {
+  content: "Autocomplete off";
+}
+
+
 .card {
   cursor: pointer;
 }

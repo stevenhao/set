@@ -10,7 +10,7 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
 </head>
 
-<body class="dark" draggable>
+<body class="dark autocomplete-on" draggable>
   <br><br>
   <svg style="height:0">
     <defs>
@@ -51,7 +51,10 @@
         Done?
       </div>
     </div>
-    <div id="light-dark" class="btn small" style="position:absolute;top:0%;left:0%"></div>
+    <div id="settings" style="position:absolute;top:0%;left:0%">
+      <div id="light-dark" class="btn small" ></div>
+      <div id="autocomplete" class="btn small"></div>
+    </div>
     <div id="restart" class="btn small" style="position:absolute;top:0%;right:0%">Restart</div>
   </div>
 
@@ -68,7 +71,7 @@
 
       root.Settings = {
         fastMode: true
-        autoComplete: true
+        autocomplete: true
         theme: 'dark'
         gestureTimeout: 1000
         keyboardTimeout: 2000

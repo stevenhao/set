@@ -47,7 +47,7 @@ root.Controller = do ->
     if action == currentGesture.action
       if action == 'select'
         Model.select(i)
-        if Settings.autoComplete
+        if Settings.autocomplete
           Model.assistSet()
       else
         Model.deselect(i)
@@ -102,6 +102,10 @@ root.Controller = do ->
       Settings.theme = 'dark'
     View.setTheme(Settings.theme)
 
+  toggleAutocomplete = ->
+    Settings.autocomplete = !Settings.autocomplete
+    View.setAutocomplete(Settings.autocomplete)
+
   toggleFullScreen = ->
     View.toggleFullScreen()
 
@@ -115,5 +119,6 @@ root.Controller = do ->
     releaseKey: releaseKey
     releaseMouse: releaseHold
     toggleTheme: toggleTheme
+    toggleAutocomplete: toggleAutocomplete
     toggleFullScreen: toggleFullScreen
   }
