@@ -15,6 +15,7 @@ var paths = {
 }
 var placements = {1: "85,50", 2: "60,50", 3: "35,50"};
 var colors = ["red", "purple", "green", "blue", "orange", "brown", "yellow", "silver"];
+var powersetColors = ["green", "red", "orange", "purple", "blue", "brown", "yellow", "silver"];
 var shadings = ["open", "striped", "solid"], shapes = ["oval", "diamond", "squiggle"], counts = [1, 2, 3];
 
 function makeStandardCard(card) {
@@ -54,7 +55,7 @@ function makePowersetCard(card, dim) {
       if (card.value & (1 << i)) {
         var cx = xspacing * (Math.floor(i / rows) + 1);
         var cy = yspacing * (i % rows + 1);
-        var circ = $$('circle').attr('cx', cx).attr('cy', cy).attr('r', 10).addClass(colors[i]).addClass('shape').addClass('circle');
+        var circ = $$('circle').attr('cx', cx).attr('cy', cy).attr('r', 10).addClass(powersetColors[i]).addClass('shape').addClass('circle');
         circ.appendTo(svgElem);
       }
     }
