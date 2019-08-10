@@ -191,12 +191,12 @@ function findPowerSet(cards, previous) {
 function powersetWithDimension(dim) {
   return {
     name: 'Power Set ' + dim,
-    makeDeck: function() {
+    makeDeck: function(seed) {
       var deck = [];
       for (var i = 1; i < (1 << dim); ++i) {
         deck.push({type: '2^' + dim, value: i});
       }
-      return shuffle(deck);
+      return shuffle(deck, seed);
     },
     deal: deal,
     isSet: isPowerSet,

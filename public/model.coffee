@@ -8,6 +8,7 @@ root.Model = do ->
   startTime = null
   endTime = null
   phase = null
+  seed = null
 
   getClockTime = ->
     seconds = Math.floor((endTime - startTime) / 1000)
@@ -16,7 +17,7 @@ root.Model = do ->
   deselectAll = -> selected.slice().forEach(deselect)
 
   newGame = ->
-    deck = variant.makeDeck()
+    deck = variant.makeDeck(seed)
     cards = variant.deal(deck)
     selected = []
     startTime = Date.now()
@@ -28,6 +29,8 @@ root.Model = do ->
     View.setLabels(phase)
 
   restart = ->
+    seed = (rand(0x1000000)).toString(16)
+    View.showSeed(seed)
     if phase == 'gameover'
       View.gameOverDone()
       setTimeout(newGame, 1000)
@@ -35,11 +38,15 @@ root.Model = do ->
       newGame()
 
   loadGame = ->
+    seed = initialSeed
     gameid = variant.name
     print 'loading', gameid
     if typeof(Storage) isnt 'undefined' and localStorage.getItem(gameid)?
       game = JSON.parse(localStorage.getItem(gameid))
       if (game? and game.cards? and game.deck? and game.startTime? and game.selected? and game.phase?)
+        if seed != null and seed != game.seed
+          return false
+        seed = game.seed
         cards = game.cards
         deck = game.deck
         startTime = game.startTime
@@ -59,6 +66,7 @@ root.Model = do ->
           View.addCards(cards)
           View.layoutCards()
           View.setLabels(phase)
+          View.showSeed(seed)
           return true
     return false
 
@@ -66,7 +74,7 @@ root.Model = do ->
     gameid = variant.name
     if typeof(Storage) isnt 'undefined'
       gameString = JSON.stringify {
-        cards: cards, deck: deck, startTime: startTime, phase: phase,
+        cards: cards, deck: deck, startTime: startTime, phase: phase, seed: seed,
         selected: [], # do we want to preserve selected cards?
         endTime: endTime, # may be null
       }
