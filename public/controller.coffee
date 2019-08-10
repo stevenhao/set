@@ -4,7 +4,7 @@ root.Controller = do ->
   ## Game Controller
   start = -> 
     if not Model.loadGame()
-      Model.restart()
+      Model.newGame()
   checkSet = -> 
     if Model.checkSet()
       Model.clearSet()

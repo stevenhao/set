@@ -1,4 +1,4 @@
-function makeStandardDeck() {
+function makeStandardDeck(seed) {
   var deck = []
   for(var i = 0; i < 81; ++i) {
     var cur = i;
@@ -8,7 +8,7 @@ function makeStandardDeck() {
     var z = cur;
     deck.push({type: '3^4', count: a, color: b, shading: c, shape: z});
   }
-  return shuffle(deck);
+  return shuffle(deck, seed);
 }
 
 function isNotNull(set) {
@@ -133,8 +133,8 @@ superset = {
 
 hiddenset = {
   name: 'Set',
-  makeDeck: function() {
-    var ret = makeStandardDeck();
+  makeDeck: function(seed) {
+    var ret = makeStandardDeck(seed);
     ret[0].hidden = true;
     return ret;
   },

@@ -38,7 +38,7 @@ root.Model = do ->
       newGame()
 
   loadGame = ->
-    seed = initialSeed
+    seed = if initialSeed? then initialSeed else null
     gameid = variant.name
     print 'loading', gameid
     if typeof(Storage) isnt 'undefined' and localStorage.getItem(gameid)?
