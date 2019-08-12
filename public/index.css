@@ -177,6 +177,14 @@ body {
   stroke: darkorange;
   fill: darkorange;
 }
+.light .brown {
+  stroke: black;
+  fill: black;
+}
+.light .silver {
+  stroke: #C0C0C0;
+  fill: #C0C0C0;
+}
 .light .open {
   fill: none;
 }
