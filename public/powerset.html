@@ -83,6 +83,7 @@
         if not View.isAnimating()
           if cnt in allowedDimensions
             currentDimensions = cnt
+            root.initialSeed = window.location.hash.substr(1) || null
             root.variant = Variants.powersetWithDimension(currentDimensions)
             root.Controller.start()
       setDimension(6)
