@@ -1,7 +1,7 @@
 root = exports ? this
 
 root.Controller = do ->
-  ## Game Controller
+  ## Game Controller - Dummy PR Test
   start = -> 
     if not Model.loadGame()
       Model.newGame()
