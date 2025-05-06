@@ -78,6 +78,7 @@
         animationTime: 400
       }
 
+      root.initialSeed = window.location.hash.substr(1) || null
       root.variant = Variants.set
       root.Controller.start()
    </script>

@@ -250,6 +250,9 @@ root.View = do ->
     $cards.forEach ($card) -> $card.remove()
     $cards = []
 
+  showSeed = (seed) ->
+    window.location.hash = seed
+
   return {
     select: (i) -> 
       $cards[i].addClass('selected')
@@ -259,6 +262,7 @@ root.View = do ->
     gameOver: gameOver
     gameOverDone: gameOverDone
     clear: clear
+    showSeed: showSeed
 
     setTheme: (theme) -> $body.removeClass('light dark').addClass(theme)
     toggleFullScreen: toggleFullScreen
