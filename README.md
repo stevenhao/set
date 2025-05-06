@@ -1,4 +1,5 @@
 # Set Game Repository
+[![Ask https://DeepWiki.com](https://devin.ai/assets/askdeepwiki.png)](https://deepwiki.com/stevenhao/set)
 This repository contains the code for a web-based implementation of the Set card game. It includes all necessary assets and scripts to deploy and run the game in a web environment. The live version of the game can be played at [set.stevenhao.com](http://set.stevenhao.com).
 ## Introduction
 
