@@ -31,13 +31,43 @@ root.View = do ->
 
   ## Event listeners
   do registerListeners = ->
-    $toggleTheme.on('click touchend', Controller.toggleTheme)
-    $toggleAutocomplete.on('click touchend', Controller.toggleAutocomplete)
-    $restart.on('click touchend', @w Controller.restart)
-    $restartBig.on('click touchend', @w Controller.restart)
-    $checkSet.on('click touchend', @w Controller.checkSet)
-    $noSet.on('click touchend', @w Controller.noSet)
-    $done.on('click touchend', @w Controller.noSet)
+    # Track if touch event just occurred to prevent double firing
+    touchJustOccurred = false
+    touchTimeout = null
+    
+    handleTouchEnd = (handler) -> (evt) ->
+      evt.preventDefault()
+      touchJustOccurred = true
+      clearTimeout(touchTimeout)
+      touchTimeout = setTimeout(-> 
+        touchJustOccurred = false
+      , 300)
+      handler.apply(this, arguments)
+    
+    handleClick = (handler) -> (evt) ->
+      if !touchJustOccurred
+        handler.apply(this, arguments)
+    
+    $toggleTheme.on('touchend', handleTouchEnd(Controller.toggleTheme))
+    $toggleTheme.on('click', handleClick(Controller.toggleTheme))
+    
+    $toggleAutocomplete.on('touchend', handleTouchEnd(Controller.toggleAutocomplete))
+    $toggleAutocomplete.on('click', handleClick(Controller.toggleAutocomplete))
+    
+    $restart.on('touchend', handleTouchEnd(@w Controller.restart))
+    $restart.on('click', handleClick(@w Controller.restart))
+    
+    $restartBig.on('touchend', handleTouchEnd(@w Controller.restart))
+    $restartBig.on('click', handleClick(@w Controller.restart))
+    
+    $checkSet.on('touchend', handleTouchEnd(@w Controller.checkSet))
+    $checkSet.on('click', handleClick(@w Controller.checkSet))
+    
+    $noSet.on('touchend', handleTouchEnd(@w Controller.noSet))
+    $noSet.on('click', handleClick(@w Controller.noSet))
+    
+    $done.on('touchend', handleTouchEnd(@w Controller.noSet))
+    $done.on('click', handleClick(@w Controller.noSet))
 
     $window.on 'orientationchange resize', ->
       layoutCards()
