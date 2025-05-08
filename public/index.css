@@ -1,3 +1,12 @@
+html, body {
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  width: 100%;
+}
+
 body {
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   color: #666;
@@ -53,6 +62,11 @@ body {
   .small {
     font-size: 12px;
   }
+  
+  html, body {
+    overflow: hidden;
+    touch-action: none;
+  }
 }
 @media screen and (max-width : 1024px) /* Tablet */
 {
@@ -67,6 +81,11 @@ body {
   }
   .small {
     font-size: 12px;
+  }
+  
+  html, body {
+    overflow: hidden;
+    touch-action: none;
   }
 }
 @media screen and (max-width : 768px) /* Phone Landscape/Tablet Portrait */
@@ -83,6 +102,11 @@ body {
   .small {
     font-size: 10px;
   }
+  
+  html, body {
+    overflow: hidden;
+    touch-action: none;
+  }
 }
 @media screen and (max-width : 450px) /* Phone Portrait */
 {
@@ -98,6 +122,17 @@ body {
   .small {
     font-size: 9px;
   }
+  
+  html, body {
+    overflow: hidden;
+    touch-action: none;
+  }
+}
+
+#game {
+  height: 100%;
+  width: 100%;
+  position: relative;
 }
 
 .small {
