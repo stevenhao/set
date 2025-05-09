@@ -1,0 +1,18 @@
+{
+  "name": "set",
+  "version": "1.0.0",
+  "description": "[![Ask https://DeepWiki.com](https://devin.ai/assets/askdeepwiki.png)](https://deepwiki.com/stevenhao/set) This repository contains the code for a web-based implementation of the Set card game. It includes all necessary assets and scripts to deploy and run the game in a web environment. The live version of the game can be played at [set.stevenhao.com](http://set.stevenhao.com). ## Introduction",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "openai": "^4.98.0"
+  }
+}

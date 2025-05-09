@@ -1,0 +1,153 @@
+/* Styles for the AI Assistant panel */
+.ai-assistant-container {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 300px;
+  max-height: 80vh;
+  background-color: rgba(30, 30, 30, 0.85);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  color: white;
+  font-family: sans-serif;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.ai-assistant-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: rgba(50, 50, 50, 0.9);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ai-assistant-title {
+  font-weight: bold;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.ai-assistant-title .ai-icon {
+  margin-right: 8px;
+  color: #10a37f; /* OpenAI green */
+}
+
+.ai-assistant-toggle {
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.ai-assistant-content {
+  padding: 15px;
+  overflow-y: auto;
+  flex-grow: 1;
+  max-height: 300px;
+}
+
+.ai-assistant-message {
+  margin-bottom: 15px;
+  line-height: 1.4;
+  font-size: 14px;
+}
+
+.ai-assistant-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ai-assistant-button {
+  background-color: rgba(16, 163, 127, 0.2); /* OpenAI green with transparency */
+  color: white;
+  border: 1px solid rgba(16, 163, 127, 0.5);
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ai-assistant-button:hover {
+  background-color: rgba(16, 163, 127, 0.4);
+}
+
+.ai-assistant-loading {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: ai-spin 1s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes ai-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ai-assistant-container.collapsed {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  overflow: hidden;
+}
+
+.ai-assistant-container.collapsed .ai-assistant-content,
+.ai-assistant-container.collapsed .ai-assistant-actions {
+  display: none;
+}
+
+.ai-assistant-container.collapsed .ai-assistant-header {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+.ai-assistant-container.collapsed .ai-assistant-title {
+  display: none;
+}
+
+.ai-assistant-container.collapsed .ai-assistant-toggle {
+  transform: rotate(180deg);
+}
+
+/* Light theme adjustments */
+body.light .ai-assistant-container {
+  background-color: rgba(240, 240, 240, 0.9);
+  color: #333;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.light .ai-assistant-header {
+  background-color: rgba(220, 220, 220, 0.9);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body.light .ai-assistant-actions {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body.light .ai-assistant-button {
+  background-color: rgba(16, 163, 127, 0.1);
+  color: #333;
+}
+
+body.light .ai-assistant-button:hover {
+  background-color: rgba(16, 163, 127, 0.2);
+}
