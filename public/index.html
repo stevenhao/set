@@ -6,8 +6,10 @@
   <meta name="viewport" content="width=device-width,  height=device-height, initial-scale=1, maximum-scale=1.0, user-scalable = no">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="ai-assistant.css">
   <link rel="apple-touch-icon" sizes="57x57" href="set-icon.png"/>
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body class="dark autocomplete-on" draggable>
@@ -56,11 +58,40 @@
       <div id="autocomplete" class="btn small"></div>
     </div>
     <div id="restart" class="btn small" style="position:absolute;top:0%;right:0%">Restart</div>
+    
+    <!-- AI Assistant UI -->
+    <div id="ai-assistant" class="ai-assistant-container">
+      <div class="ai-assistant-header">
+        <div class="ai-assistant-title">
+          <i class="fas fa-robot ai-icon"></i> AI Assistant
+        </div>
+        <div class="ai-assistant-toggle" id="ai-assistant-toggle">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+      </div>
+      <div class="ai-assistant-content" id="ai-assistant-content">
+        <div class="ai-assistant-message">
+          Hello! I'm your AI assistant for Set. I can help you learn the game, provide hints, and explain why cards form a set.
+        </div>
+      </div>
+      <div class="ai-assistant-actions">
+        <button class="ai-assistant-button" id="ai-hint-button">
+          <i class="fas fa-lightbulb"></i> Hint
+        </button>
+        <button class="ai-assistant-button" id="ai-explain-button">
+          <i class="fas fa-question-circle"></i> Explain Selection
+        </button>
+        <button class="ai-assistant-button" id="ai-strategy-button">
+          <i class="fas fa-chess"></i> Strategy Tip
+        </button>
+      </div>
+    </div>
   </div>
 
   <script src="header.js"></script>
   <script src="draw.js"></script>
   <script src="variants.js"></script>
+  <script src="ai-assistant.js"></script>
   <script type="text/coffeescript" src="controller.coffee"></script>
   <script type="text/coffeescript" src="view.coffee"></script>
   <script type="text/coffeescript" src="model.coffee"></script>
@@ -77,6 +108,31 @@
         keyboardTimeout: 2000
         animationTime: 400
       }
+
+      # Initialize AI Assistant
+      root.aiAssistant = new AIAssistant()
+      
+      # Setup AI Assistant UI interactions
+      $('#ai-assistant-toggle').on 'click', ->
+        $('#ai-assistant').toggleClass('collapsed')
+      
+      $('#ai-hint-button').on 'click', ->
+        $('#ai-assistant-content').append('<div class="ai-assistant-message"><div class="ai-assistant-loading"></div>Getting a hint...</div>')
+        root.aiAssistant.getHint(root.Model.getCards(), root.Model.getSelected()).then (hint) ->
+          $('.ai-assistant-loading').parent().html(hint)
+      
+      $('#ai-explain-button').on 'click', ->
+        if root.Model.getSelected().length > 0
+          $('#ai-assistant-content').append('<div class="ai-assistant-message"><div class="ai-assistant-loading"></div>Analyzing your selection...</div>')
+          root.aiAssistant.explainSet(root.Model.getCards(), root.Model.getSelected()).then (explanation) ->
+            $('.ai-assistant-loading').parent().html(explanation)
+        else
+          $('#ai-assistant-content').append('<div class="ai-assistant-message">Please select some cards first.</div>')
+      
+      $('#ai-strategy-button').on 'click', ->
+        $('#ai-assistant-content').append('<div class="ai-assistant-message"><div class="ai-assistant-loading"></div>Thinking of a strategy tip...</div>')
+        root.aiAssistant.getStrategyTip().then (tip) ->
+          $('.ai-assistant-loading').parent().html(tip)
 
       root.variant = Variants.set
       root.Controller.start()
